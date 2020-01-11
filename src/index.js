@@ -1,8 +1,8 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import App from './App';
-const title = 'hiiiiiiii';
+import App from './App.jsx';
+
 ReactDOM.render(
-  <App title={title} />,
+  <App />,
   document.getElementById('app')
 );

@@ -1,4 +1,4 @@
-const profile = {
+const userProfile = {
   "id": 1234567890987654400,
   "username": "marianne_v",
   "resource_state": 3,
@@ -36,14 +36,14 @@ const profile = {
     {
       "id": "b332343367856",
       "primary": false,
-      "name": "sweet-whip",
+      "name": "Sweet Whip",
       "resource_state": 2,
       "distance": 23
     },
     {
       "id": "b99999999999",
       "primary": false,
-      "name": "sweet-whip",
+      "name": "Orange Bike",
       "resource_state": 2,
       "distance": 83
     }
@@ -65,3 +65,5 @@ const profile = {
     }
   ]
 }
+
+export default userProfile
