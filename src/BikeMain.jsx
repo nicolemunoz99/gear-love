@@ -1,6 +1,6 @@
 import React from 'react';
 
-const Bike = (props) => {
+const BikeMain = (props) => {
   console.log(props.bike)
   
   // const addComponent (e) => {
@@ -9,11 +9,12 @@ const Bike = (props) => {
 
   return (
     <div className='bike-container'>
-      <div>{props.bike.name}</div>
+      <img src=''></img>
+      <div onClick={showComponents}>{props.bike.name}</div>
       <div>Total Miles: {props.bike.distance}</div>
       <button>Add a component to track</button>
     </div>
   );
 }
 
-export default Bike;
+export default BikeMain;

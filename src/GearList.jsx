@@ -1,5 +1,5 @@
 import React from 'react';
-import Bike from './Bike.jsx'
+import BikeMain from './BikeMain.jsx'
 
 const GearList = (props) => {
   
@@ -9,7 +9,7 @@ const GearList = (props) => {
       My Bikes
       {
         props.bikeList.map((bike, i)=> {
-            return <Bike key={bike.id} bike={bike}/>
+            return <BikeMain key={bike.id} bike={bike}/>
         })
       }
     </div>
