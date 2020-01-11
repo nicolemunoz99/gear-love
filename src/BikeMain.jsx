@@ -3,9 +3,9 @@ import React from 'react';
 const BikeMain = (props) => {
   console.log(props.bike)
   
-  // const addComponent (e) => {
-  //   console.log()
-  // }
+  const showComponents = (e) => {
+    console.log()
+  }
 
   return (
     <div className='bike-container'>
