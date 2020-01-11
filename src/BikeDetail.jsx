@@ -6,7 +6,7 @@ const BikeDetail = props => {
   return (
     <div>
       BikeDetail
-      <button>Replace</button>
+      <button>Retire component</button>
     </div>
   );
 }

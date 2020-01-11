@@ -1,3 +1,4 @@
+const dbQuery = require ('../db');
 
 const partModel = () => {
 
