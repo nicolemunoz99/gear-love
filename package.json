@@ -4,9 +4,9 @@
   "description": "",
   "main": "profile_data.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
     "build": "webpack --mode production",
-    "start": "live-server ./dist",
+    "fe-start": "live-server ./dist",
+    "be-start": "nodemon ./server.js",
     "react-dev": "webpack -d --watch",
     "sass-dev": "sass --watch ./dist/sass-files/style.scss ./dist/sass-compiled/compiled.css"
   },
@@ -19,12 +19,15 @@
     "@babel/preset-react": "^7.7.4",
     "babel-loader": "^8.0.6",
     "live-server": "^1.2.1",
+    "nodemon": "^2.0.2",
     "prop-types": "^15.7.2",
     "webpack": "^4.41.5",
     "webpack-cli": "^3.3.10"
   },
   "dependencies": {
     "css-loader": "^3.4.2",
+    "express": "^4.17.1",
+    "pg": "^7.17.1",
     "react": "^16.12.0",
     "react-dom": "^16.12.0",
     "style-loader": "^1.1.2"
