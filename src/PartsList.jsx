@@ -15,7 +15,6 @@ const PartsList = (props) => {
   );
 
   const handleDeletePart = (partId) => {
-    console.log('pardID', partId)
     axios.delete(`${api}parts/${partId}`)
       .then(() => {
         props.refreshPartsList(props.currentBike);
@@ -23,10 +22,8 @@ const PartsList = (props) => {
   };
 
   const handleResetMiles = (partId) => {
-    console.log(props.currentBike)
     axios.put(`${api}parts/${partId}?dist_when_added=${props.currentBike.distance}`) // update part mileage to current distance
       .then((data) => {
-        console.log('hi')
         props.refreshPartsList(props.currentBike);
       })
 
@@ -45,7 +42,7 @@ const PartsList = (props) => {
   return (
     <div className="container">
       <div className="h2">Parts for {props.currentBike.name}</div>
-      <button className="btn btn-outline-dark">New Component +</button>
+      <button onClick={showComponentForm} className="btn btn-outline-dark">New Component +</button>
       <div className="row">
       
       { props.partsList.length > 0 ?
@@ -58,7 +55,7 @@ const PartsList = (props) => {
       }
     
     </div>
-    <button className="btn btn-outline-dark" onClick={returnToBikeList}>Back to your stable</button> 
+    <button className="btn btn-outline-dark" onClick={returnToBikeList}>Back to your bikes</button> 
     </div>
   );
 }

@@ -31,21 +31,21 @@ const userProfile = {
       "primary": true,
       "name": "EMC",
       "resource_state": 2,
-      "distance": 555
+      "distance": 1555
     },
     {
       "id": "b332343367856",
       "primary": false,
       "name": "Sweet Whip",
       "resource_state": 2,
-      "distance": 23
+      "distance": 872323
     },
     {
       "id": "b99999999999",
       "primary": false,
       "name": "Orange Bike",
       "resource_state": 2,
-      "distance": 83
+      "distance": 763
     }
   ],
   "shoes": [

@@ -17,9 +17,7 @@ const App = (props) =>{
 
   // TO DO: make photo database
 
-  console.log(userProfile.bikes)
   userProfile.bikes.forEach(bike => {
-    console.log(bike.id)
     bikePhotos.forEach(photo => {
       if (photo.bikeId === bike.id) {
         bike.url = photo.url
@@ -44,7 +42,12 @@ const App = (props) =>{
 
 
   return (
-    <div className="mt-5">
+    <div className="mt-5 mb-5">
+      <div className="container-flex chain-love mb-5">
+        <div className="row title-text ml-5">
+          Chain Love
+        </div>
+      </div>
       {view === 'bikeList' || view === 'newPartForm' ? 
         <BikesList viewHandler={viewHandler} handleBikeSelect={handleBikeSelect} bikeList={userProfile.bikes} /> :
         null
