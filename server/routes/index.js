@@ -5,10 +5,11 @@ const parts = require('../controller/index.js').parts;
 
 router.get('/bikes', bikes.get);
 router.post('/bikes', bikes.post);
-router.delete('/:bike_id', bikes.delete);
+router.delete('/:bikeId', bikes.delete);
 
-router.get('/:bike_id/parts', parts.get);
-router.post('/:bike_id/parts', parts.post);
-router.delete('/:bike_id/parts/:part_id', parts.delete);
+router.get('/:bikeId/parts', parts.get);
+router.post('/:bikeId/parts', parts.post);
+router.delete('/parts/:partId', parts.delete);
+router.put('/parts/:partId', parts.put)
 
 module.exports = router;

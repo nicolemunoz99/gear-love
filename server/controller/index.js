@@ -19,10 +19,9 @@ module.exports = {
       bikeModel.post(data, (err, result) => {
         if (err) { res.sendStatus(400) }
         else { 
-          console.log('result in controller', result)
-          res.send(result)
+          res.send(result);
         }
-      })
+      });
     },
     delete: () => {
 
@@ -30,14 +29,36 @@ module.exports = {
   },
 
   parts: {
-    get: () => {
-
+    get: (req, res) => {
+      partModel.get(req.params.bikeId, (err, result) => {
+        if (err) { res.sendStatus(400) }
+        else {
+          res.send(result);
+        }
+      });
     },
-    post: () => {
-
+    post: (req, res) => {
+      let partData = req.body;
+      partData.bikeId = req.params.bikeId
+      partModel.post(partData, (err, result) => {
+        if (err) { res.sendStatus(500) }
+        else {
+          res.send(result)
+        }
+      });
     },
-    delete: () => {
-
+    delete: (req, res) => {
+      partModel.delete(req.params.partId, (err, result) => {
+        if (err) { res.sendStatus(500) }
+        else {
+          res.sendStatus(204);
+        }
+      });
+    },
+    put: (req,res) => {
+      partModel.put(req.params.partId, req.query, (err, results) => {
+        res.sendStatus(204);
+      });
     }
   }
 }

@@ -10,6 +10,7 @@ const bikeModel = {
     let data = await dbQuery(params, toController)
   },
   post: async (bikeData, toController) => {
+    console.log('bikeData', bikeData)
     let {bikeId, brand, model, year, distanceAtSignup, userId} = {...bikeData};
     let params = {
       name: 'post-bike',
