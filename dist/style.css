@@ -35,11 +35,11 @@
 
 .chain-love {
   background-image: linear-gradient(to right, rgb(158, 28, 184) , yellow);
-  height: 6rem;
+  height: 4rem;
 }
 
 .title-text {
-  font-size: 4em;
+  font-size: 3em;
   color: white;
   text-shadow: 0 0.08em 0 black;
   position: relative;

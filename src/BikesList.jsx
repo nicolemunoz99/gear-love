@@ -3,19 +3,24 @@ import BikePanel from './BikePanel.jsx'
 
 
 const BikesList = (props) => {
-
+  
+  const inProgress = (e) => {
+    props.popup(true);
+  }
 
   return (
     <div className="container-sm">
       <div className="h2">Your Bikes</div>
-      <div className="row">
+      <div className="row justify-content-center mb-3">
       {
         props.bikeList.map( bike => {
             return <BikePanel viewHandler={props.viewHandler} handleBikeSelect={props.handleBikeSelect} key={bike.id} bike={bike}/>
         })
       }
       </div>
-      <button className="btn btn-outline-dark">Add a bike +</button>
+      <div className="row justify-content-center">
+        <button onClick={inProgress} className="btn btn-outline-dark">Add a bike +</button>
+      </div>
     </div>
   );
 }

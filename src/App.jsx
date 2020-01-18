@@ -1,5 +1,5 @@
-import React from 'react';
-import axios from 'axios';
+import React, { useState } from 'react';
+import UnderConstructionModal from './UnderConstructionModal.jsx';
 import BikesList from './BikesList.jsx';
 import PartsList from './PartsList.jsx';
 import NewPartForm from './NewPartForm.jsx'
@@ -8,14 +8,16 @@ import bikePhotos from './sampleData/bikePhotos.js'; // eventually delete
 
 
 const App = (props) =>{
-  const [userProfile, setProfile] = React.useState(profileData);
-  const [currentBike, changeBike] = React.useState(null);
-  const [partsList, changeParts] = React.useState(null);
-  const [partFormModal, updatePartFormView] = React.useState(false)
-  const [view, changeView] = React.useState('bikeList'); //bikeList, parts, newPartForm
+  const [userProfile, setProfile] = useState(profileData);
+  const [currentBike, changeBike] = useState(null);
+  const [partsList, changeParts] = useState(null);
+  const [partFormModal, updatePartFormView] = useState(false)
+  const [view, changeView] = useState('bikeList'); //bikeList, parts, newPartForm
+  const [progressModal, popup] = useState(false);
   const api = 'http://127.0.0.1:7500/';
 
   // TO DO: make photo database
+
 
   userProfile.bikes.forEach(bike => {
     bikePhotos.forEach(photo => {
@@ -40,6 +42,10 @@ const App = (props) =>{
     else { changeView(view) };
   }
 
+  const underConstructionHandler = () => {
+    popup(false)
+  }
+
 
   return (
     <div className="mt-5 mb-5">
@@ -49,7 +55,11 @@ const App = (props) =>{
         </div>
       </div>
       {view === 'bikeList' || view === 'newPartForm' ? 
-        <BikesList viewHandler={viewHandler} handleBikeSelect={handleBikeSelect} bikeList={userProfile.bikes} /> :
+        <BikesList viewHandler={viewHandler} 
+                  handleBikeSelect={handleBikeSelect} 
+                  bikeList={userProfile.bikes} 
+                  popup={popup}
+                  /> :
         null
       }
       {view === 'parts' || view === 'newPartForm' ?
@@ -60,7 +70,14 @@ const App = (props) =>{
         <NewPartForm currentBike={currentBike} updatePartFormView={updatePartFormView}/> :
         null
       }
+      {progressModal ?
+        <UnderConstructionModal popup={popup} /> :
+        null
+      }
     </div>
+
+      
+
   );
 }
 
