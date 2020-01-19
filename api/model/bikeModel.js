@@ -1,4 +1,4 @@
-const dbQuery = require('../db')
+const dbQuery = require('./index.js')
 
 const bikeModel = {
   get: async (userId, toController) => {

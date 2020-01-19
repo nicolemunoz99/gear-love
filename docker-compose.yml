@@ -1,0 +1,22 @@
+version: '3'
+
+services:
+
+  client:
+    build: client/
+    depends_on:
+      - 'api'
+    ports: 
+      - '8080:8080'
+
+  api:
+    build: api/
+    depends_on:
+      - 'db'
+    ports: 
+      - '7500:7500'
+    links:
+      - 'db:db'
+  
+  db:
+    build: db/

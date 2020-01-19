@@ -6,9 +6,13 @@ const NewPartForm = (props) => {
     if (e.target.className.includes('modal-backdrop') || e.target.className.includes('close-me')) {
       props.updatePartFormView(false);
     }
-  }
-console.log(props.currentBike)
-  const noPointerEvents = () => { }
+  };
+  const inProgress = (e) => {
+    e.preventDefault();
+    props.popup(true);
+  };
+
+  const noPointerEvents = () => { };
 
   return (
     <div onClick={hideNewPartForm} className="d-flex justify-content-center modal-backdrop">
@@ -16,8 +20,8 @@ console.log(props.currentBike)
       <div className='newPartForm p-5 border rounded'>
 
         <form onClick={noPointerEvents}>
-        <div className="h2 mb-5">Enter a new part</div>
-        <div className="close-me h3" onClick={hideNewPartForm}>X</div>
+          <div className="h2 mb-5">Enter a new component</div>
+          <div className="close-me h3" onClick={hideNewPartForm}>X</div>
           <div className="form-group row">
             <label className="col-sm-4 col-form-label">Basics: </label>
             <div className="col-sm-8">
@@ -33,14 +37,20 @@ console.log(props.currentBike)
               <input type="email" className="form-control" id="part-type" placeholder="Model"></input>
             </div>
           </div>
-          <div className="form-group row mt-5">
-            <label className="col-sm-4 col-form-label">New part? </label>
+          <div className="form-group row mt-5 align-items-end">
+            <label className="col-sm-4 col-form-label">Estimated distance on this component? </label>
             <div className="col-sm-8">
-              <input type="email" className="form-control" id="current-wear" placeholder="estimated distance/time on this part has?"></input>
+              <input type="email" className="form-control" id="current-wear" placeholder="(to do: units)"></input>
             </div>
           </div>
-          <div class="form-group row mt-5">
-            <label class="col-sm-4 col-form-label" >Usage metric: </label>
+          <div className="form-group row mt-5 align-items-end">
+            <label className="col-sm-4 col-form-label">Estimated time on this component? </label>
+            <div className="col-sm-8">
+              <input type="email" className="form-control" id="current-wear" placeholder="(to do: units)"></input>
+            </div>
+          </div>
+          <div class="form-group row mt-5 align-items-end">
+            <label class="col-sm-4 col-form-label" >Receive notifcation based on: </label>
             <div className="col-sm-4">
               <input type="checkbox" id="inlineCheckbox1" value="option1"></input>
               <label className="ml-2">Hours</label>
@@ -50,7 +60,10 @@ console.log(props.currentBike)
               <label className="ml-2">Distance</label>
             </div>
           </div>
-          
+          <div className="row justify-content-center">
+            <button onClick={inProgress} className="btn btn-outline-dark">Submit Component</button>
+          </div>
+
         </form>
 
       </div>

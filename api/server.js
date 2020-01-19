@@ -1,5 +1,5 @@
 const express = require ('express');
-const router = require('./server/routes/index.js');
+const router = require('./routes/index.js');
 const cors = require('cors');
 const port = 7500;
 const app = express();

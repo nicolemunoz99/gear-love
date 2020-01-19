@@ -30,6 +30,7 @@ module.exports = {
 
   parts: {
     get: (req, res) => {
+      
       partModel.get(req.params.bikeId, (err, result) => {
         if (err) { res.sendStatus(400) }
         else {

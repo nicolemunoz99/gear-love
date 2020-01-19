@@ -1,4 +1,4 @@
-const dbQuery = require ('../db');
+const dbQuery = require ('./index.js');
 
 const partModel = {
   get: async (bikeId, toController) => {
@@ -12,12 +12,13 @@ const partModel = {
   },
 
   post: async (partData, toController) => {
-    let {bikeId, distWhenAdded, partType, partBrand, partModel, lifespanDistance} = {...partData}
+    console.log(partData);
+    let {bikeId, distWhenAdded, partType, partBrand, partModel, lifespanDistance, lisfespanTime} = {...partData}
     console.log('in model')
     let params = {
       name: 'post-a-part',
-      text: 'INSERT INTO gear.parts (bike_id, dist_when_added, part_type, part_brand, part_model, lifespan_dist) VALUES($1, $2, $3, $4, $5, $6) RETURNING *',
-      values: [bikeId, distWhenAdded, partType, partBrand, partModel, lifespanDistance]
+      text: 'INSERT INTO gear.parts (bike_id, dist_when_added, part_type, part_brand, part_model, lifespan_dist) VALUES($1, $2, $3, $4, $5, $6, $7) RETURNING *',
+      values: [bikeId, distWhenAdded, partType, partBrand, partModel, lifespanDistance, lifespanTime]
     };
     dbQuery(params, toController);
     let data = await dbQuery;

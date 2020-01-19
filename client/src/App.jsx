@@ -1,10 +1,12 @@
 import React, { useState } from 'react';
-import UnderConstructionModal from './UnderConstructionModal.jsx';
+import api from '../api.js'
+import profileData from './sampleData/userProfile.js'; // eventually delete
+import bikePhotos from './sampleData/bikePhotos.js'; // eventually delete
+import UnderConstructionModal from './UnderConstructionModal.jsx'; // eventually delete
 import BikesList from './BikesList.jsx';
 import PartsList from './PartsList.jsx';
 import NewPartForm from './NewPartForm.jsx'
-import profileData from './sampleData/userProfile.js'; // eventually delete
-import bikePhotos from './sampleData/bikePhotos.js'; // eventually delete
+
 
 
 const App = (props) =>{
@@ -14,9 +16,9 @@ const App = (props) =>{
   const [partFormModal, updatePartFormView] = useState(false)
   const [view, changeView] = useState('bikeList'); //bikeList, parts, newPartForm
   const [progressModal, popup] = useState(false);
-  const api = 'http://127.0.0.1:7500/';
 
-  // TO DO: make photo database
+
+  // TO DO: photo database
 
 
   userProfile.bikes.forEach(bike => {
@@ -42,11 +44,6 @@ const App = (props) =>{
     else { changeView(view) };
   }
 
-  const underConstructionHandler = () => {
-    popup(false)
-  }
-
-
   return (
     <div className="mt-5 mb-5">
       <div className="container-flex chain-love mb-5">
@@ -67,7 +64,7 @@ const App = (props) =>{
         null
       }
       {partFormModal === true ?
-        <NewPartForm currentBike={currentBike} updatePartFormView={updatePartFormView}/> :
+        <NewPartForm currentBike={currentBike} updatePartFormView={updatePartFormView} popup={popup}/> :
         null
       }
       {progressModal ?
@@ -75,8 +72,6 @@ const App = (props) =>{
         null
       }
     </div>
-
-      
 
   );
 }

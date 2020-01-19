@@ -6,12 +6,11 @@ const pool = new Pool ({
   database: 'chainlove',
   port: '5432',
   max: 10
-})
+});
 
 const dbQuery = async (params, callback) => {
-  let data = await pool.query(params)
-  // console.log('data', data.rows)
+  let data = await pool.query(params);
   callback(null, data.rows);
-}
+};
 
 module.exports = dbQuery;

@@ -1,11 +1,12 @@
 import React, { useEffect } from 'react';
 import Part from './Part.jsx'
 import axios from 'axios';
+import api from '../api.js'
 
 
 const PartsList = (props) => {
   const [parts, updateParts] = React.useState(null);
-  const api = 'http://127.0.0.1:7500/';
+
   
   useEffect(
     () => {
