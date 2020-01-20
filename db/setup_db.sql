@@ -18,10 +18,11 @@ CREATE TABLE gear.bikes(
 CREATE TABLE gear.parts(
   part_id SERIAL primary key NOT NULL,
   bike_id VARCHAR,
-  dist_when_added INT,
-  part_type VARCHAR,
-  part_brand VARCHAR,
-  part_model VARCHAR,
+  dist_on_add INT,
+  time_on_add INT,
+  type VARCHAR,
+  brand VARCHAR,
+  model VARCHAR,
   lifespan_dist INT,
   lifespan_time INT,
   criteria_choice VARCHAR DEFAULT 'distance'

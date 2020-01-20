@@ -16,14 +16,14 @@ const PartsList = (props) => {
   );
 
   const handleDeletePart = (partId) => {
-    axios.delete(`${api}parts/${partId}`)
+    axios.delete(`${api}/parts/${partId}`)
       .then(() => {
         props.refreshPartsList(props.currentBike);
       })
   };
 
   const handleResetMiles = (partId) => {
-    axios.put(`${api}parts/${partId}?dist_when_added=${props.currentBike.distance}`) // update part mileage to current distance
+    axios.put(`${api}/parts/${partId}?dist_when_added=${props.currentBike.distance}`) // update part mileage to current distance
       .then((data) => {
         props.refreshPartsList(props.currentBike);
       })

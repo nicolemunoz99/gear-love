@@ -30,7 +30,7 @@ const App = (props) =>{
   })
 
   const handleBikeSelect = (bikeInfo) => {
-    fetch(`${api}${bikeInfo.id}/parts`)
+    fetch(`${api}/${bikeInfo.id}/parts`)
       .then(response => response.json())
       .then(partsData => {
         changeParts(partsData);

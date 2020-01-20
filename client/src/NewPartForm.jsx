@@ -1,6 +1,8 @@
-import React from 'react';
+import React, { useState } from 'react';
 
 const NewPartForm = (props) => {
+  const [usageMetric, updateUseageMetric] = useState(null);
+  const [trackingMethod, updatetrackingMethod] = useState(null);
 
   const hideNewPartForm = (e) => {
     if (e.target.className.includes('modal-backdrop') || e.target.className.includes('close-me')) {
@@ -12,6 +14,12 @@ const NewPartForm = (props) => {
     props.popup(true);
   };
 
+  const selectUsageMetric = (e) => {
+    updateUseageMetric(e.target.value)
+  }
+  const selectTracking = (e) => {
+    updatetrackingMethod(e.target.value)
+  }
   const noPointerEvents = () => { };
 
   return (
@@ -29,7 +37,6 @@ const NewPartForm = (props) => {
             </div>
           </div>
           <div className="form-group row justify-content-end">
-
             <div className="col-sm-4">
               <input type="email" className="form-control" id="part-type" placeholder="Brand"></input>
             </div>
@@ -38,27 +45,46 @@ const NewPartForm = (props) => {
             </div>
           </div>
           <div className="form-group row mt-5 align-items-end">
+            <label className="col-sm-4 col-form-label">Use default setting for tracking usage of this part or specify custom metrics? </label>
+            <div className="col-sm-8">
+              <div className="custom-control custom-radio custom-control-inline">
+                <input onClick={selectTracking} type="radio" id="default-yes" value="default" name="customRadioInline1" className="custom-control-input"></input>
+                <label className="custom-control-label" for="default-yes">Default</label>
+              </div>
+              <div className="custom-control custom-radio custom-control-inline">
+                <input onClick={selectTracking} type="radio" id="custom" value="custom" name="customRadioInline1" className="custom-control-input"></input>
+                <label className="custom-control-label" for="custom">Custom</label>
+              </div>
+            </div>
+          </div>
+          <div className="form-group row mt-5 align-items-end">
+            <label className="col-sm-4 col-form-label" >Receive notifcation based on: </label>
+            <div className="col-sm-8">
+              <div className="custom-control custom-radio custom-control-inline">
+                <input onClick={selectUsageMetric} type="radio" id="distance" value="distance" name="customRadioInline1" className="custom-control-input"></input>
+                <label className="custom-control-label" for="distance">Distance</label>
+              </div>
+              <div className="custom-control custom-radio custom-control-inline">
+                <input onClick={selectUsageMetric} type="radio" id="hours" value="hours" name="customRadioInline1" className="custom-control-input"></input>
+                <label className="custom-control-label" for="hours">Hours</label>
+              </div>
+            </div>
+          </div>
+          <div className="form-group row mt-5 align-items-end">
             <label className="col-sm-4 col-form-label">Estimated distance on this component? </label>
             <div className="col-sm-8">
-              <input type="email" className="form-control" id="current-wear" placeholder="(to do: units)"></input>
+              <input type="email" className="form-control" id="current-distance-wear" placeholder="(to do: units)"></input>
             </div>
           </div>
           <div className="form-group row mt-5 align-items-end">
             <label className="col-sm-4 col-form-label">Estimated time on this component? </label>
             <div className="col-sm-8">
-              <input type="email" className="form-control" id="current-wear" placeholder="(to do: units)"></input>
+              <input type="email" className="form-control" id="current-time-wear" placeholder="(to do: units)"></input>
             </div>
           </div>
-          <div class="form-group row mt-5 align-items-end">
-            <label class="col-sm-4 col-form-label" >Receive notifcation based on: </label>
-            <div className="col-sm-4">
-              <input type="checkbox" id="inlineCheckbox1" value="option1"></input>
-              <label className="ml-2">Hours</label>
-            </div>
-            <div className="col-sm-4">
-              <input type="checkbox" id="inlineCheckbox1" value="option1"></input>
-              <label className="ml-2">Distance</label>
-            </div>
+
+          <div className="form-group row mt-5 align-items-end">
+            <label className="col-sm-4 col-form-label" >Enter lifespan in {usageMetric}: </label>
           </div>
           <div className="row justify-content-center">
             <button onClick={inProgress} className="btn btn-outline-dark">Submit Component</button>
@@ -68,7 +94,7 @@ const NewPartForm = (props) => {
 
       </div>
 
-    </div>
+    </div >
 
   )
 }
