@@ -6,7 +6,6 @@
   "scripts": {
     "build": "webpack --mode production",
     "fe-start": "live-server ./dist",
-    "be-start": "nodemon ./server.js",
     "react-dev": "webpack -d --watch",
     "sass-dev": "sass --watch ./dist/sass-files/style.scss ./dist/sass-compiled/compiled.css"
   },
