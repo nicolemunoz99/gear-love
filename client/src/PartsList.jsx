@@ -44,13 +44,13 @@ const PartsList = (props) => {
     <div className="container">
       <div className="h2">Parts for {props.currentBike.name}</div>
       <button onClick={showComponentForm} className="btn btn-outline-dark">New Component +</button>
-      <div className="row">
+      <div className="row justify-content-center">
       
       { props.partsList.length > 0 ?
         props.partsList.map((part, i) => {
           return <Part key={part.part_id} handleDeletePart={handleDeletePart} handleResetMiles={handleResetMiles} currentBike={props.currentBike} part={part}/>
         }) :
-        <div className="col mt-3 mb-3">
+        <div className="col-12 mt-3 mb-3">
           Couldn't find any components for {props.currentBike.name} . . .
         </div>
       }

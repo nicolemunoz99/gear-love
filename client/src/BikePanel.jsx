@@ -11,7 +11,7 @@ const BikePanel = (props) => {
   }
 
   return (
-    <div className="col-3 border border-dark rounded shadow m-2 p-2">
+    <div className="col-md-3 border border-dark rounded shadow m-2 p-2">
       <div className="photo-container">
         <div onClick={showComponents} className="h4 pointer">{props.bike.name}</div>
         <img onClick={showComponents} className="bike-photo pointer" src={props.bike.url}></img>

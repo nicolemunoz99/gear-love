@@ -33,6 +33,7 @@ const App = (props) =>{
     fetch(`${api}/${bikeInfo.id}/parts`)
       .then(response => response.json())
       .then(partsData => {
+        console.log(partsData)
         changeParts(partsData);
         changeBike(bikeInfo);
         changeView('parts')
