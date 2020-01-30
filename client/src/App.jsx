@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import axios from 'axios';
 import api from '../api.js'
 import profileData from './sampleData/userProfile.js'; // eventually delete
 import bikePhotos from './sampleData/bikePhotos.js'; // eventually delete
@@ -45,6 +46,10 @@ const App = (props) =>{
     else { changeView(view) };
   }
 
+  const getOauth = () => {
+    axios.get('https://www.strava.com/oauth/authorize')
+  }
+
   return (
     <div className="mt-5 mb-5">
       <div className="container-flex chain-love mb-5">
@@ -72,6 +77,7 @@ const App = (props) =>{
         <UnderConstructionModal popup={popup} /> :
         null
       }
+      <button><a href="https://www.strava.com/oauth/authorize?client_id=42069&response_type=code&redirect_uri=http://localhost:7500/exchange_token&approval_prompt=force&scope=read">Strava Oauth</a></button>
     </div>
 
   );
