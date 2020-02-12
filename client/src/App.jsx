@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import api from '../api.js'
 import profileData from './sampleData/userProfile.js'; // eventually delete
@@ -6,21 +6,27 @@ import bikePhotos from './sampleData/bikePhotos.js'; // eventually delete
 import UnderConstructionModal from './UnderConstructionModal.jsx'; // eventually delete
 import BikesList from './BikesList.jsx';
 import PartsList from './PartsList.jsx';
-import NewPartForm from './NewPartForm.jsx'
+import NewPartForm from './NewPartForm.jsx';
+import cookieHandler from '../helperFuncs/cookieHandler.js';
+import urls from '../../urls.js'
+import strava from '../stravaAccess.js'
 
 
-
-const App = (props) =>{
+const App = (props) => {
+  const [sessionId, updateSessionId] = useState(null);
   const [userProfile, setProfile] = useState(profileData);
   const [currentBike, changeBike] = useState(null);
   const [partsList, changeParts] = useState(null);
-  const [partFormModal, updatePartFormView] = useState(false)
+  const [partFormModal, updatePartFormView] = useState(false);
   const [view, changeView] = useState('bikeList'); //bikeList, parts, newPartForm
   const [progressModal, popup] = useState(false);
 
 
-  // TO DO: photo database
-
+  useEffect(() => {
+    let tempSessionId = cookieHandler();
+    console.log('sessionId', tempSessionId)
+    if (tempSessionId !== sessionId) { updateSessionId(tempSessionId) }
+  }, [])
 
   userProfile.bikes.forEach(bike => {
     bikePhotos.forEach(photo => {
@@ -46,41 +52,56 @@ const App = (props) =>{
     else { changeView(view) };
   }
 
-  const getOauth = () => {
-    axios.get('https://www.strava.com/oauth/authorize')
-  }
-
   return (
     <div className="mt-5 mb-5">
-      <div className="container-flex chain-love mb-5">
-        <div className="row title-text ml-5">
-          Chain Love
+      <div className="container">
+        <div className="row">
+          <div className="col-12">
+            <a href={`https://www.strava.com/oauth/authorize` +
+                      `?client_id=${strava.clientId}` +
+                      `&response_type=code` +
+                      `&redirect_uri=${urls.api}/exchangeToken/${sessionId}` +
+                      `&approval_prompt=force&scope=read`}> 
+              Strava Oauth
+            </a>
+          </div>
         </div>
       </div>
-      {view === 'bikeList' || view === 'newPartForm' ? 
-        <BikesList viewHandler={viewHandler} 
-                  handleBikeSelect={handleBikeSelect} 
-                  bikeList={userProfile.bikes} 
-                  popup={popup}
-                  /> :
-        null
-      }
-      {view === 'parts' || view === 'newPartForm' ?
-        <PartsList viewHandler={viewHandler} refreshPartsList={handleBikeSelect} currentBike={currentBike} partsList={partsList} /> :
-        null
-      }
-      {partFormModal === true ?
-        <NewPartForm currentBike={currentBike} updatePartFormView={updatePartFormView} popup={popup}/> :
-        null
-      }
-      {progressModal ?
-        <UnderConstructionModal popup={popup} /> :
-        null
-      }
-      <button><a href="https://www.strava.com/oauth/authorize?client_id=42069&response_type=code&redirect_uri=http://localhost:7500/exchange_token&approval_prompt=force&scope=read">Strava Oauth</a></button>
+      <div className="container-fluid chain-love mb-5">
+        <div className="row title-text ml-5">
+          <div className="col-12">
+            Chain Love
+          </div>
+        </div>
+      </div>
+      <div className="container">
+
+
+        {view === 'bikeList' || view === 'newPartForm' ?
+          <BikesList viewHandler={viewHandler}
+            handleBikeSelect={handleBikeSelect}
+            bikeList={userProfile.bikes}
+            popup={popup}
+          /> :
+          null
+        }
+        {view === 'parts' || view === 'newPartForm' ?
+          <PartsList viewHandler={viewHandler} refreshPartsList={handleBikeSelect} currentBike={currentBike} partsList={partsList} /> :
+          null
+        }
+        {partFormModal === true ?
+          <NewPartForm currentBike={currentBike} updatePartFormView={updatePartFormView} popup={popup} /> :
+          null
+        }
+        {progressModal ?
+          <UnderConstructionModal popup={popup} /> :
+          null
+        }
+
+      </div>
     </div>
 
   );
 }
 
- export default App;
+export default App;
