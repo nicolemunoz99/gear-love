@@ -25,7 +25,8 @@ CREATE TABLE IF NOT EXISTS gear.parts(
   model VARCHAR,
   lifespan_dist INT,
   lifespan_time INT,
-  criteria_choice VARCHAR DEFAULT 'distance'
+  tracking_method VARCHAR,
+  useage_metric VARCHAR
 );
 
 CREATE INDEX bike_id_idx1 ON gear.bikes (bike_id);
