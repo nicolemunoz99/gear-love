@@ -1,4 +1,4 @@
-CREATE DATABASE IF NOT EXISTS chainlove;
+CREATE DATABASE chainlove;
 
 \c chainlove;
 CREATE SCHEMA IF NOT EXISTS gear;

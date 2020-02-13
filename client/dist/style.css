@@ -80,6 +80,11 @@ button:hover {
 }
 
 .part-panel {
-  /* width: 100%; */
   height: inherit;
+}
+
+.strong-text {
+  font-size: 1.5em;
+  font-weight: bold;
+  text-align: center;
 }
