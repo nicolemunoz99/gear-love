@@ -7,7 +7,7 @@ import UnderConstructionModal from './UnderConstructionModal.jsx'; // eventually
 import BikesList from './BikesList.jsx';
 import PartsList from './PartsList.jsx';
 import NewPartForm from './NewPartForm.jsx';
-import cookieHandler from '../helperFuncs/cookieHandler.js';
+import cookie from '../helperFuncs/cookie.js';
 import urls from '../../urls.js'
 import strava from '../stravaAccess.js'
 
@@ -23,17 +23,22 @@ const App = (props) => {
 
 
   useEffect(() => {
-    let tempSessionId = cookieHandler();
+    let tempSessionId = cookie.hasSessionId();
     console.log('sessionId', tempSessionId)
     if (tempSessionId !== sessionId) { updateSessionId(tempSessionId) }
-  }, [])
+  }, []);
+
+  const stravaApi = () => {
+    let query = `?client_id=${strava.clientId}` +
+                `&client_secret=${strava.client_secret}`
+  }
 
   userProfile.bikes.forEach(bike => {
     bikePhotos.forEach(photo => {
       if (photo.bikeId === bike.id) {
         bike.url = photo.url
       }
-    })
+    });
   })
 
   const handleBikeSelect = (bikeInfo) => {
@@ -60,10 +65,13 @@ const App = (props) => {
             <a href={`https://www.strava.com/oauth/authorize` +
                       `?client_id=${strava.clientId}` +
                       `&response_type=code` +
-                      `&redirect_uri=${urls.api}/exchangeToken/${sessionId}` +
+                      `&redirect_uri=${urls.api}/signup/${sessionId}` +
                       `&approval_prompt=force&scope=read`}> 
-              Strava Oauth
+              Register via Strava Oauth 2
             </a>
+          </div>
+          <div className="col-12">
+            <button onClick={stravaApi}>Get data</button>
           </div>
         </div>
       </div>

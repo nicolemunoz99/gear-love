@@ -56,8 +56,6 @@ const NewPartForm = (props) => {
     tempState['useage_metric'] = e.target.value;
     updateInputs(tempState);
   }
-  
-
 
 
   const noPointerEvents = () => { };

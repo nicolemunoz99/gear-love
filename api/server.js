@@ -3,8 +3,10 @@ const router = require('./routes/index.js');
 const cors = require('cors');
 const port = 7500;
 const app = express();
-const urls = require('../urls.js')
-const sessionModel = require('./model/sessionModel.js')
+const urls = require('../urls.js');
+const userModel = require('./model/userModel.js');
+const strava = require('./stravaAccess.js');
+const axios = require('axios');
 app.use('*', cors());
 
 const bodyParser = require('body-parser');
@@ -14,18 +16,32 @@ app.use(bodyParser.json());
 app.use('/', router);
 
 
-app.get('/exchangeToken/:sessionId', (req, res) => {
+app.get('/signup/:sessionId', (req, res) => {
   // recieve exchange token after user logs in on Strava
   console.log(req.query) //state, code, scope
-  console.log('sessionId', req.params.sessionId)
+  // console.log('sessionId', req.params.sessionId)
   sessionInfo = {
     session_id: req.params.sessionId,
-    access_token: req.query.code
+    code: req.query.code
   };
-  sessionModel(sessionInfo, (err, result) => {
-    console.log('result from model', result)
-    res.redirect(urls.client)
-  });
+
+  stravaAccessQuery = `?client_id=${strava.clientId}` +
+                      `&client_secret=${strava.clientSecret}` +
+                      `&code=${req.query.code}` +
+                      `&grant_type=authorization_code`;
+  console.log('stravaAccessQuery', stravaAccessQuery)
+  // query strava to get REFRESH TOKEN ad SHORT-LIVED ACCESS TOKEN
+  axios.post(`https://www.strava.com/oauth/token${stravaAccessQuery}`)
+    .then(response => {
+      console.log('response: ', response.data)
+      userInfo = response;
+      userInfo.stravaId = userInfo.athlete.id;
+      delete userInfo.athlete
+      userModel.post(userInfo, (err, result) => {
+        console.log('response from userModel: ', result)
+        res.redirect(urls.client);
+      })
+    });
 });
 
 
