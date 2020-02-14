@@ -28,10 +28,12 @@ const App = (props) => {
     if (tempSessionId !== sessionId) { updateSessionId(tempSessionId) }
   }, []);
 
-  const stravaApi = () => {
-    let query = `?client_id=${strava.clientId}` +
-                `&client_secret=${strava.client_secret}`
-  }
+  const stravaGetData = () => {
+    axios.get(`${urls.api}/strava`)
+      .then(response => {
+        console.log('login response: ', response);
+      })
+  };
 
   userProfile.bikes.forEach(bike => {
     bikePhotos.forEach(photo => {
@@ -69,9 +71,10 @@ const App = (props) => {
                       `&approval_prompt=force&scope=read`}> 
               Register via Strava Oauth 2
             </a>
+            
           </div>
           <div className="col-12">
-            <button onClick={stravaApi}>Get data</button>
+            <button onClick={stravaGetData}>Load data</button>
           </div>
         </div>
       </div>

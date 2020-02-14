@@ -56,10 +56,18 @@ module.exports = {
         }
       });
     },
-    put: (req,res) => {
+    put: (req, res) => {
       partModel.put(req.params.partId, req.query, (err, results) => {
         res.sendStatus(204);
       });
+    }
+  },
+
+  users: {
+    get: (req, res) => {
+      // check if access token is still valid; issue new if expired
+
+      res.redirect(`http://localhost:8080`) 
     }
   }
 }

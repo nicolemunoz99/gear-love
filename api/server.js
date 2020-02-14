@@ -29,18 +29,17 @@ app.get('/signup/:sessionId', (req, res) => {
                       `&client_secret=${strava.clientSecret}` +
                       `&code=${req.query.code}` +
                       `&grant_type=authorization_code`;
-  console.log('stravaAccessQuery', stravaAccessQuery)
   // query strava to get REFRESH TOKEN ad SHORT-LIVED ACCESS TOKEN
   axios.post(`https://www.strava.com/oauth/token${stravaAccessQuery}`)
     .then(response => {
       console.log('response: ', response.data)
-      userInfo = response;
+      userInfo = response.data;
       userInfo.stravaId = userInfo.athlete.id;
       delete userInfo.athlete
       userModel.post(userInfo, (err, result) => {
         console.log('response from userModel: ', result)
-        res.redirect(urls.client);
-      })
+        res.redirect(`${urls.client}`);
+      });
     });
 });
 
