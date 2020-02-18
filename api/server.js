@@ -29,7 +29,7 @@ app.get('/signup/:sessionId', (req, res) => {
                       `&client_secret=${strava.clientSecret}` +
                       `&code=${req.query.code}` +
                       `&grant_type=authorization_code`;
-  // query strava to get REFRESH TOKEN ad SHORT-LIVED ACCESS TOKEN
+  // query strava to get REFRESH TOKEN and SHORT-LIVED ACCESS TOKEN
   axios.post(`https://www.strava.com/oauth/token${stravaAccessQuery}`)
     .then(response => {
       console.log('response: ', response.data)

@@ -4,21 +4,26 @@ CREATE DATABASE chainlove;
 CREATE SCHEMA IF NOT EXISTS gear;
 
 CREATE TABLE IF NOT EXISTS gear.users(
+  user_id SERIAL primary key NOT NULL
+  username VARCHAR NOT NULL,
+  pw VARCHAR NOT NULL,
   strava_id BIGINT,
   access_token VARCHAR,
   expires_at INT,
   expires_in INT,
-  refresh_token VARCHAR
+  refresh_token VARCHAR,
+  scope VARCHAR,
+  date VARCHAR
 );
 
 -- bikes table: of bikes and total miles on it
 CREATE TABLE IF NOT EXISTS gear.bikes(
-  strava_id BIGINT,
+  user_id BIGINT,
   bike_id VARCHAR,
   brand VARCHAR,
   model VARCHAR,
   model_year INT,
-  distanceAtSignup INT,
+  distance_at_signup INT,
   date_added VARCHAR
 );
 
@@ -36,5 +41,3 @@ CREATE TABLE IF NOT EXISTS gear.parts(
   tracking_method VARCHAR,
   useage_metric VARCHAR
 );
-
-CREATE SCHEMA IF NOT EXISTS sessions;

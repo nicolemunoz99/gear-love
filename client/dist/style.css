@@ -16,7 +16,7 @@
   z-index: 1000;
 }
 
-.newPartForm {
+/* .newPartForm {
   position: fixed;
   width: 70%;
   max-width: 40rem;
@@ -29,10 +29,28 @@
 }
 
 .newPartForm button {
-  /* background-image: linear-gradient(to right, rgb(158, 28, 184) , yellow); */
+  background-color: white;
+  color: black;
+} */
+
+.chainlove-modal {
+  position: fixed;
+  width: 70%;
+  max-width: 40rem;
+  background-color: rgb(44, 39, 39);
+  color: white;
+  z-index: 1500;
+  min-height: 60vh;
+  max-height: 95vh;
+  overflow: auto;
+}
+
+.chainlove-modal button {
   background-color: white;
   color: black;
 }
+
+
 
 .photo-container {
   width: 100%;
@@ -74,6 +92,7 @@ button:hover {
   top: 1rem;
   right: 1rem;
   cursor: pointer;
+  font-size: 0.8em;
 }
 
 .alert {

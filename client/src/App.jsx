@@ -3,10 +3,10 @@ import axios from 'axios';
 import api from '../api.js'
 import profileData from './sampleData/userProfile.js'; // eventually delete
 import bikePhotos from './sampleData/bikePhotos.js'; // eventually delete
-import UnderConstructionModal from './UnderConstructionModal.jsx'; // eventually delete
+
 import BikesList from './BikesList.jsx';
 import PartsList from './PartsList.jsx';
-import NewPartForm from './NewPartForm.jsx';
+import ModalIndex from './modals/ModalIndex.jsx';
 import cookie from '../helperFuncs/cookie.js';
 import urls from '../../urls.js'
 import strava from '../stravaAccess.js'
@@ -18,9 +18,9 @@ const App = (props) => {
   const [currentBike, changeBike] = useState(null);
   const [partsList, changeParts] = useState(null);
   const [partFormModal, updatePartFormView] = useState(false);
+  const [modal, changeModal] = useState(null); // null, login, newPart
+  
   const [view, changeView] = useState('bikeList'); //bikeList, parts, newPartForm
-  const [progressModal, popup] = useState(false);
-
 
   useEffect(() => {
     let tempSessionId = cookie.hasSessionId();
@@ -34,6 +34,8 @@ const App = (props) => {
         console.log('login response: ', response);
       })
   };
+
+  
 
   userProfile.bikes.forEach(bike => {
     bikePhotos.forEach(photo => {
@@ -55,8 +57,7 @@ const App = (props) => {
   };
 
   const viewHandler = (view, modal) => {
-    if (view === 'newPartForm') { updatePartFormView(true) }
-    else { changeView(view) };
+    changeView(view);
   }
 
   return (
@@ -87,28 +88,18 @@ const App = (props) => {
       </div>
       <div className="container">
 
-
         {view === 'bikeList' || view === 'newPartForm' ?
           <BikesList viewHandler={viewHandler}
             handleBikeSelect={handleBikeSelect}
             bikeList={userProfile.bikes}
-            popup={popup}
-          /> :
-          null
+          />
+          : null
         }
         {view === 'parts' || view === 'newPartForm' ?
-          <PartsList viewHandler={viewHandler} refreshPartsList={handleBikeSelect} currentBike={currentBike} partsList={partsList} /> :
-          null
+          <PartsList viewHandler={viewHandler} changeModal={changeModal} refreshPartsList={handleBikeSelect} currentBike={currentBike} partsList={partsList} />
+          : null
         }
-        {partFormModal === true ?
-          <NewPartForm currentBike={currentBike} updatePartFormView={updatePartFormView} popup={popup} /> :
-          null
-        }
-        {progressModal ?
-          <UnderConstructionModal popup={popup} /> :
-          null
-        }
-
+        <ModalIndex modal={modal} changeModal={changeModal}/>
       </div>
     </div>
 

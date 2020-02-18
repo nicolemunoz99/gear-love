@@ -4,9 +4,6 @@ import BikePanel from './BikePanel.jsx'
 
 const BikesList = (props) => {
   
-  const inProgress = (e) => {
-    props.popup(true);
-  }
 
   return (
     <div className="container-sm">
@@ -18,9 +15,9 @@ const BikesList = (props) => {
         })
       }
       </div>
-      <div className="row justify-content-center">
-        <button onClick={inProgress} className="btn btn-outline-dark">Add a bike +</button>
-      </div>
+      {/* <div className="row justify-content-center">
+        <button className="btn btn-outline-dark">Add a bike +</button>
+      </div> */}
     </div>
   );
 }

@@ -30,8 +30,8 @@ const PartsList = (props) => {
 
   };
   
-  const showComponentForm = () => {
-    props.viewHandler('newPartForm');
+  const newPartHandler = () => {
+    props.changeModal('newPart');
   };
 
   const returnToBikeList = () => {
@@ -43,7 +43,7 @@ const PartsList = (props) => {
   return (
     <div className="container">
       <div className="h2">Parts for {props.currentBike.name}</div>
-      <button onClick={showComponentForm} className="btn btn-outline-dark">New Component +</button>
+      <button onClick={newPartHandler} className="btn btn-outline-dark">New Component +</button>
       <div className="row justify-content-center">
       
       { props.partsList.length > 0 ?
