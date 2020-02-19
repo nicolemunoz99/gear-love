@@ -15,7 +15,7 @@ const LoginModal = (props) => {
   const [userInputs, updateInputs] = useState(initFormValues);
   const [usernameExists, updateUsernameExists] = useState(null);
   const [passwordsMatch, updatePasswordsMatch] = useState(true);
-  const [success, updateSuccess] = useState(false);
+  const [registrationSuccess, updateRegistrationSuccess] = useState(false);
 
   const handleInput = (e) => {
     const tempState = JSON.parse(JSON.stringify(userInputs));
@@ -51,7 +51,7 @@ const LoginModal = (props) => {
     };
     axios.post(`${urls.api}/users`, signupInfo)
       .then(() => {
-        updateSuccess(true);
+        updateRegistrationSuccess(true);
       })
   };
 
@@ -80,7 +80,7 @@ const LoginModal = (props) => {
 
         </div>
 
-        {usernameExists === false && success === false ?
+        {usernameExists === false && registrationSuccess === false ?
           <div>
             <div className="form-group row mt-4 justify-content-center">
               <div className="col-sm-12 col-md-8 col-lg-12">
@@ -107,14 +107,14 @@ const LoginModal = (props) => {
           : null
         }
 
-        {success ?
+        {registrationSuccess ?
           <div>
             <div className="mb-3">Successfully created Chain Love account.</div>
             <div>
               <a href={`https://www.strava.com/oauth/authorize` +
                       `?client_id=${strava.clientId}` +
                       `&response_type=code` +
-                      `&redirect_uri=${urls.api}/signup?username=${userInputs.username}` +
+                      `&redirect_uri=${urls.api}/users/signup?username=${userInputs.username}` +
                       `&approval_prompt=force&scope=read`}>
                         Authorize Chain Love to import your Strava data.
               </a>

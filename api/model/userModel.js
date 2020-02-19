@@ -1,19 +1,33 @@
 const dbQuery = require('./index.js');
 
+
 module.exports =  {
   post: async (info, callback) => {
     let params = {
       name: 'create-user',
-      text: 'INSERT into gear.users (username, pw, strava_id, access_token, expires_at, expires_in, refresh_token) ' +
-            'VALUES($1, $2, $3, $4, $5, $6, $7)',
-      values: [info.username, info.pw, info.strava_id, info.access_token, info.expires_at, info.expires_in, info.refresh_token]
+      text: 'INSERT into gear.users (username, pw) ' +
+            'VALUES($1, $2)',
+      values: [info.username, info.pw]
     };
     let result = await dbQuery(params, callback);
   },
-
-  put: () => {
-
+// strava_id, access_token, expires_at, expires_in, refresh_token
+  stravaAuth: async(info, callback) => {
+    console.log('info in userModel', info);
+    ({username, strava_id, access_token, expires_at, expires_in, refresh_token, scope} = {...info});
+    let params = {
+      name: 'strava-auth',
+      text: `UPDATE gear.users SET strava_id = ${strava_id}, access_token = '${access_token}', scope = '${scope}', ` +
+            `expires_at = ${expires_at}, expires_in = ${expires_in}, refresh_token = '${refresh_token}' ` +
+            `WHERE username = '${username}'`
+    }
+    console.log('params', params)
+    let result = await dbQuery(params, callback);
   },
+  
+  // put: async () => {
+  //   let params 
+  // },
 
   verify: async (username, callback) => {
     let params = {
