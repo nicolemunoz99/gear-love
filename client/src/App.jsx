@@ -8,8 +8,8 @@ import BikesList from './BikesList.jsx';
 import PartsList from './PartsList.jsx';
 import ModalIndex from './modals/ModalIndex.jsx';
 import cookie from '../helperFuncs/cookie.js';
-import urls from '../../urls.js'
-import strava from '../stravaAccess.js'
+import urls from '../../urls.js';
+import strava from '../stravaAccess.js';
 
 
 const App = (props) => {

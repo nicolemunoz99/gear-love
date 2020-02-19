@@ -4,7 +4,7 @@ CREATE DATABASE chainlove;
 CREATE SCHEMA IF NOT EXISTS gear;
 
 CREATE TABLE IF NOT EXISTS gear.users(
-  user_id SERIAL primary key NOT NULL
+  user_id SERIAL primary key NOT NULL,
   username VARCHAR NOT NULL,
   pw VARCHAR NOT NULL,
   strava_id BIGINT,

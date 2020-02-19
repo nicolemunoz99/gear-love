@@ -16,7 +16,6 @@ const NewPartModal = (props) => {
   const [showDefaultInfo, updateShowDefaultInfo] = useState(false);
 
   const updatePartHandler = (partType) => {
-    console.log('this is here')
     let tempState = JSON.parse(JSON.stringify(initFormVals))
     tempState["type"] = partType;
     updateInputs(tempState);
@@ -46,14 +45,10 @@ const NewPartModal = (props) => {
     updateInputs(tempState);
   }
 
-
-  const noPointerEvents = () => { };
-
   return (
-    <Modal changeModal={props.changeModal}>
+    <Modal width={8} title="Enter a new component" changeModal={props.changeModal}>
 
-      <form onClick={noPointerEvents}>
-        <div className="h2 mb-5">Enter a new component</div>
+      <form>
         <div className="form-group row mb-2">
           <label className="col-sm-4 col-form-label">Basics: </label>
           <div className="col-sm-8">

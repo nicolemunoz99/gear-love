@@ -1,5 +1,6 @@
-const bikeModel = require('../model/bikeModel.js')
-const partModel = require('../model/partModel.js')
+const bikeModel = require('../model/bikeModel.js');
+const partModel = require('../model/partModel.js');
+const userModel = require('../model/userModel.js');
 
 
 module.exports = {
@@ -65,9 +66,31 @@ module.exports = {
 
   users: {
     get: (req, res) => {
+      if (req.query.verify) {
+        userModel.verify(req.query.username, (err, result) => {
+          if (err) {
+            res.sendStatus(500);
+          }
+          else {
+            console.log('result', result)
+            res.send({userExists: result.length});
+          }          
+        });
+      }
+      
       // check if access token is still valid; issue new if expired
 
-      res.redirect(`http://localhost:8080`) 
-    }
+    },
+
+    post: (req, res) => {
+      console.log(req.body);
+      userModel.post(req.body, (err, result) => {
+        res.sendStatus(200);
+      });
+    },
+
+    initialize: (req, res) =>{
+
+    },
   }
 }

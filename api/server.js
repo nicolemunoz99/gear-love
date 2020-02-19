@@ -16,14 +16,9 @@ app.use(bodyParser.json());
 app.use('/', router);
 
 
-app.get('/signup/:sessionId', (req, res) => {
+app.get('/signup', (req, res) => {
   // recieve exchange token after user logs in on Strava
   console.log(req.query) //state, code, scope
-  // console.log('sessionId', req.params.sessionId)
-  sessionInfo = {
-    session_id: req.params.sessionId,
-    code: req.query.code
-  };
 
   stravaAccessQuery = `?client_id=${strava.clientId}` +
                       `&client_secret=${strava.clientSecret}` +
@@ -35,8 +30,9 @@ app.get('/signup/:sessionId', (req, res) => {
       console.log('response: ', response.data)
       userInfo = response.data;
       userInfo.stravaId = userInfo.athlete.id;
+      userInfo.username = req.query.username;
       delete userInfo.athlete
-      userModel.post(userInfo, (err, result) => {
+      userModel.put(userInfo, (err, result) => {
         console.log('response from userModel: ', result)
         res.redirect(`${urls.client}`);
       });

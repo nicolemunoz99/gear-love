@@ -11,8 +11,10 @@ router.delete('/:bikeId', bikes.delete);
 router.get('/:bikeId/parts', parts.get);
 router.post('/:bikeId/parts', parts.post);
 router.delete('/parts/:partId', parts.delete);
-router.put('/parts/:partId', parts.put)
+router.put('/parts/:partId', parts.put);
 
-router.get('/strava', users.get) 
+router.get('/users', users.get); // returns number of occurences of a u/n in db
+router.post('/users', users.post); // posts new u/n and p/w
+router.put('/users/initialize', users.initialize); // update with permanent oauth tokens
 
 module.exports = router;

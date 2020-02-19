@@ -10,6 +10,10 @@ const ModalIndex = (props) => {
         <NewPartModal changeModal={props.changeModal}/>
         : null
       }
+      {props.modal === null ?
+        <LoginModal changeModal={props.changeModal} />
+        : null
+      }
     </div>
   )
 }
