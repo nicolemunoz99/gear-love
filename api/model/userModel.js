@@ -14,7 +14,7 @@ module.exports =  {
 // strava_id, access_token, expires_at, expires_in, refresh_token
   stravaAuth: async(info, callback) => {
     console.log('info in userModel', info);
-    ({username, strava_id, access_token, expires_at, expires_in, refresh_token, scope} = {...info});
+    ({ username, strava_id, access_token, expires_at, expires_in, refresh_token, scope } = {...info});
     let params = {
       name: 'strava-auth',
       text: `UPDATE gear.users SET strava_id = ${strava_id}, access_token = '${access_token}', scope = '${scope}', ` +
@@ -24,10 +24,16 @@ module.exports =  {
     console.log('params', params)
     let result = await dbQuery(params, callback);
   },
-  
-  // put: async () => {
-  //   let params 
-  // },
+
+  login: async (info, callback) => {
+    console.log('info in model: ', info);
+    ({ username, pw } = {...info});
+    let params = {
+      name: 'login',
+      text: `SELECT * from gear.users WHERE username = '${username}' AND pw = '${pw}'`
+    }
+    let result = await dbQuery(params, callback);
+  },
 
   verify: async (username, callback) => {
     let params = {

@@ -4,129 +4,79 @@ import axios from 'axios';
 import urls from '../../../urls.js'
 import strava from '../../stravaAccess.js'
 
-const initFormValues = {
+const initialFormValues = {
   username: '',
-  pw1: '',
-  pw2: ''
+  pw: ''
 };
 
-
 const LoginModal = (props) => {
-  const [userInputs, updateInputs] = useState(initFormValues);
-  const [usernameExists, updateUsernameExists] = useState(null);
-  const [passwordsMatch, updatePasswordsMatch] = useState(true);
-  const [registrationSuccess, updateRegistrationSuccess] = useState(false);
+  const [userInputs, updateUserInputs] = useState(initialFormValues);
+  const [loginIsValid, updateLoginIsValid] = useState(null);
 
   const handleInput = (e) => {
-    const tempState = JSON.parse(JSON.stringify(userInputs));
+    let tempState = JSON.parse(JSON.stringify(userInputs));
     tempState[e.target.id] = e.target.value;
-    updateInputs(tempState);
+    updateUserInputs(tempState);
   };
 
-  const handleUsernameSubmit = (e) => {
+  const handleLoginSubmit = (e) => {
     e.preventDefault();
-    if (userInputs.username.length < 4) {
-      updateUsernameExists(true);
-      return
-    }
-    axios.get(`${urls.api}/users?verify=true&username=${userInputs.username.toLowerCase()}`)
+    console.log(userInputs);
+    axios.get(`${urls.api}/users/login`, {
+      params: userInputs
+    })
       .then(response => {
-        if (response.data.userExists === 0) {
-          updateUsernameExists(false);
-        } else {
-          updateUsernameExists(true);
+        console.log(response.status)
+        if (response.status === 204) {
+          updateLoginIsValid(false);
+          return;
         }
+
       })
   };
 
-  const handleFormSubmit = (e) => {
-    e.preventDefault();
-    if (userInputs.pw1 !== userInputs.pw2) {
-      updatePasswordsMatch(false);
-      return
-    }
-    let signupInfo = {
-      username: userInputs.username,
-      pw: userInputs.pw1
-    };
-    axios.post(`${urls.api}/users`, signupInfo)
-      .then(() => {
-        updateRegistrationSuccess(true);
-      })
-  };
+  const switchToSignup = () => { props.changeModal('signup'); }
 
   return (
-
-    <Modal width={5} title="Sign up" changeModal={props.changeModal}>
+    <Modal width={5} title="Login" changeModal={props.changeModal}>
       <form>
         <div className="form-group row my-4 justify-content-center">
           <div className="col-8 col-lg-12">
-            {usernameExists !== false ?
-              <div>
-                <label>Username</label>
-                <input onChange={handleInput} value={userInputs.username} type="text" className="form-control " id="username" placeholder="" value={userInputs.username}></input>
-                {usernameExists === true ?
-                  <div className="error-text">Username already taken</div>
-                  : null
-                }
-                <div className="row justify-content-center mt-4">
-                  <button onClick={handleUsernameSubmit} className="btn btn-outline-dark">Check</button>
-                </div>
-              </div>
-              : <div>{`Username: ${userInputs.username}`}</div>
-            }
+            <label>Username</label>
+            <input onChange={handleInput} value={userInputs.username} type="text" className="form-control " id="username" placeholder=""></input>
           </div>
-          <div className="w-100"></div>
-
+        </div>
+        <div className="form-group row my-4 justify-content-center">
+          <div className="col-8 col-lg-12">
+            <label>Password</label>
+            <input onChange={handleInput} value={userInputs.pw} type="password" className="form-control " id="pw" placeholder=""></input>
+          </div>
         </div>
 
-        {usernameExists === false && registrationSuccess === false ?
-          <div>
-            <div className="form-group row mt-4 justify-content-center">
-              <div className="col-sm-12 col-md-8 col-lg-12">
-                <label>Password</label>
-                <input onChange={handleInput} type="password" className="form-control" id="pw1"></input>
-              </div>
-            </div>
-            <div className="form-group row mb-4 justify-content-center">
-              <div className="col-8 col-lg-12">
-                <label>Verify password</label>
-                <input onChange={handleInput} type="password" className="form-control" id="pw2"></input>
-                {passwordsMatch === false ?
-                  <div className="error-text">Passwords don't match</div>
-                  : null
-                }
-              </div>
-            </div>
-            <div className="row justify-content-center mt-4">
-              <div className="col-12">
-                <button onClick={handleFormSubmit} className="btn btn-outline-dark full-width">Register with Chainlove</button>
-              </div>
+        {loginIsValid === false ?
+          <div className="row justify-content-center mt-4 pt-4">
+          <div className="col-12 error-text">
+            Username or password incorrect.
+          </div>
+        </div>
+        : null
+        }
+        <div className="row justify-content-center mt-4 pt-4">
+          <div className="col-12">
+            <button onClick={handleLoginSubmit} className="btn btn-outline-dark full-width">Log in</button>
+          </div>
+        </div>
+        
+        <div className="container mt-1">
+          <div className="row">
+            <div className="col-12 text-center">
+              Don't have a Chain Love account?
+            <div onClick={switchToSignup} className="cursor-pointer"><u>Sign up</u></div>
             </div>
           </div>
-          : null
-        }
-
-        {registrationSuccess ?
-          <div>
-            <div className="mb-3">Successfully created Chain Love account.</div>
-            <div>
-              <a href={`https://www.strava.com/oauth/authorize` +
-                      `?client_id=${strava.clientId}` +
-                      `&response_type=code` +
-                      `&redirect_uri=${urls.api}/users/signup?username=${userInputs.username}` +
-                      `&approval_prompt=force&scope=read`}>
-                        Authorize Chain Love to import your Strava data.
-              </a>
-            </div>
-            <small>(You'll be redirected to Strava's authorization page.)</small>
-          </div>
-          : null
-        }
-
+        </div>
       </form>
     </Modal>
-
   )
 }
 

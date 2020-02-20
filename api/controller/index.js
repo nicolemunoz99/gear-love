@@ -94,21 +94,46 @@ module.exports = {
         });
     },
 
-    get: (req, res) => {
+    checkIfUniq: (req, res) => {
       if (req.query.verify) {
         userModel.verify(req.query.username, (err, result) => {
           if (err) {
-            res.sendStatus(500);
-          }
-          else {
-            console.log('result', result)
+            res.sendStatus(400);
+          } else {
             res.send({ userExists: result.length });
           }
         });
       }
+    },
 
-      // check if access token is still valid; issue new if expired
+    login: (req, res) => {
+      console.log(req.query);
 
+      userModel.login(req.query, (err, result) => {
+        if (err) {
+          res.sendStatus(500);
+
+        }
+        else if (result.length === 0) {
+          res.sendStatus(204);
+
+        } else {
+
+        console.log(result)
+        
+        // if auth token expired
+          // query strava for new token
+          // update gear.users with new refresh/token
+        
+        // query strava for user's data
+        // scrub data
+        // send to client
+        res.sendStatus(200)
+      
+      }
+
+        
+      })
     },
 
     post: (req, res) => {
@@ -118,8 +143,5 @@ module.exports = {
       });
     },
 
-    initialize: (req, res) => {
-
-    },
   }
 }

@@ -17,10 +17,9 @@ const App = (props) => {
   const [userProfile, setProfile] = useState(profileData);
   const [currentBike, changeBike] = useState(null);
   const [partsList, changeParts] = useState(null);
-  const [partFormModal, updatePartFormView] = useState(false);
-  const [modal, changeModal] = useState(null); // null, login, newPart
+  const [modal, changeModal] = useState('login'); // null, signup, login, newPart
   
-  const [view, changeView] = useState('bikeList'); //bikeList, parts, newPartForm
+  const [view, changeView] = useState('bikeList'); // bikeList, parts, newPartForm
 
   useEffect(() => {
     let tempSessionId = cookie.hasSessionId();

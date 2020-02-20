@@ -13,12 +13,10 @@ router.post('/:bikeId/parts', parts.post);
 router.delete('/parts/:partId', parts.delete);
 router.put('/parts/:partId', parts.put);
 
-router.get('/users/signup', users.signup) // strava redirects to this endpoint
-router.get('/users', users.get); // returns number of occurences of a u/n in db
+router.get('/users/signup', users.signup); // strava auth page redirects to this endpoint
+router.get('/users/login', users.login);
+router.get('/users', users.checkIfUniq); // returns number of occurences of a u/n in db
 router.post('/users', users.post); // posts new username and pw
-router.put('/users/initialize', users.initialize); // update with permanent oauth tokens
-
-
 
 
 module.exports = router;
