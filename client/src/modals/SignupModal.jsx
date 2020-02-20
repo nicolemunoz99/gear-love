@@ -93,7 +93,7 @@ const SignupModal = (props) => {
               </div>
             </div>
             <div className="form-group row mb-4 justify-content-center">
-              <div className="col-8 col-lg-12">
+              <div className="col-sm-12 col-8 col-lg-12">
                 <label>Verify password</label>
                 <input onChange={handleInput} type="password" className="form-control" id="pw2"></input>
                 {passwordsMatch === false ?

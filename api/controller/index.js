@@ -88,7 +88,6 @@ module.exports = {
           delete userInfo.athlete
           userModel.stravaAuth(userInfo, (err, result) => {
             console.log('response from userModel: ', result)
-            // TO DO post response to DB
             res.redirect(`${urls.client}`);
           });
         });
@@ -122,6 +121,7 @@ module.exports = {
         console.log(result)
         
         // if auth token expired
+        if (result.access_token - Date.now()/1000 < 60 * 30) // get new token if expires in 30 min;
           // query strava for new token
           // update gear.users with new refresh/token
         
