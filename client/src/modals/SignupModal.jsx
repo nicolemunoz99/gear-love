@@ -29,9 +29,10 @@ const SignupModal = (props) => {
       updateUsernameExists(true);
       return
     }
-    axios.get(`${urls.api}/users?verify=true&username=${userInputs.username.toLowerCase()}`)
+    axios.get(`${urls.api}/users?check=true&username=${userInputs.username.toLowerCase()}`)
       .then(response => {
-        if (response.data.userExists === 0) {
+        console.log(response.data)
+        if (response.data) {
           updateUsernameExists(false);
         } else {
           updateUsernameExists(true);
@@ -46,7 +47,7 @@ const SignupModal = (props) => {
       return
     }
     let signupInfo = {
-      username: userInputs.username,
+      username: userInputs.username.toLowerCase(),
       pw: userInputs.pw1
     };
     axios.post(`${urls.api}/users`, signupInfo)
@@ -61,7 +62,7 @@ const SignupModal = (props) => {
 
   return (
 
-    <Modal width={5} title="Sign up" changeModal={props.changeModal}>
+    <Modal width={5} title={registrationSuccess ? 'Success' : 'Sign up'} changeModal={props.changeModal}>
       <form>
         <div className="form-group row my-4 justify-content-center">
           <div className="col-8 col-lg-12">
@@ -107,6 +108,14 @@ const SignupModal = (props) => {
                 <button onClick={handleFormSubmit} className="btn btn-outline-dark full-width">Register with Chainlove</button>
               </div>
             </div>
+            <div className="container">
+              <div className="row">
+                <div className="col-12 text-center">
+                  Already have a Chain Love account?
+          <div onClick={switchToLogin} className="cursor-pointer"><u>Log in</u></div>
+                </div>
+              </div>
+            </div>
           </div>
           : null
         }
@@ -116,25 +125,18 @@ const SignupModal = (props) => {
             <div className="mb-3">Successfully created Chain Love account.</div>
             <div>
               <a href={`https://www.strava.com/oauth/authorize` +
-                      `?client_id=${strava.clientId}` +
-                      `&response_type=code` +
-                      `&redirect_uri=${urls.api}/users/signup?username=${userInputs.username}` +
-                      `&approval_prompt=force&scope=read`}>
-                        Authorize Chain Love to import your Strava data.
+                `?client_id=${strava.clientId}` +
+                `&response_type=code` +
+                `&redirect_uri=${urls.api}/users/signup?username=${userInputs.username}` +
+                `&approval_prompt=force&scope=activity:read_all,profile:read_all`}>
+                Authorize Chain Love to import your Strava data.
               </a>
             </div>
             <small>(You'll be redirected to Strava's authorization page.)</small>
           </div>
           : null
         }
-        <div className="container">
-          <div className="row">
-            <div className="col-12 text-center">
-          Already have a Chain Love account?  
-          <div onClick={switchToLogin} className="cursor-pointer"><u>Log in</u></div>
-          </div>
-          </div>
-        </div>
+
       </form>
     </Modal>
 

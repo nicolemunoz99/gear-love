@@ -2,18 +2,18 @@ const dbQuery = require('./index.js');
 
 
 module.exports =  {
-  post: async (info, callback) => {
+  post: async (req, res) => {
     let params = {
       name: 'create-user',
       text: 'INSERT into gear.users (username, pw) ' +
             'VALUES($1, $2)',
-      values: [info.username, info.pw]
+      values: [req.body.username, req.body.pw]
     };
-    let result = await dbQuery(params, callback);
+    await dbQuery(params);
+    res.sendStatus(200);
   },
 // strava_id, access_token, expires_at, expires_in, refresh_token
-  stravaAuth: async(info, callback) => {
-    console.log('info in userModel', info);
+  stravaAuth: (info, callback) => {
     ({ username, strava_id, access_token, expires_at, expires_in, refresh_token, scope } = {...info});
     let params = {
       name: 'strava-auth',
@@ -21,26 +21,51 @@ module.exports =  {
             `expires_at = ${expires_at}, expires_in = ${expires_in}, refresh_token = '${refresh_token}' ` +
             `WHERE username = '${username}'`
     }
-    console.log('params', params)
-    let result = await dbQuery(params, callback);
+    let result = dbQuery(params, callback);
   },
 
-  login: async (info, callback) => {
-    console.log('info in model: ', info);
-    ({ username, pw } = {...info});
+  stravaRefresh: async (refreshedData) => {
+    ({ username, access_token, expires_at, expires_in, refresh_token, scope } = {...refreshedData});
     let params = {
-      name: 'login',
-      text: `SELECT * from gear.users WHERE username = '${username}' AND pw = '${pw}'`
+      name: 'strava-refresh',
+      text: `UPDATE gear.users SET access_token = '${access_token}', expires_at = ${expires_at}, ` +
+            `expires_in = ${expires_in}, refresh_token = '${refresh_token}' ` +
+            `WHERE username = '${username}'`
     }
-    let result = await dbQuery(params, callback);
+    await dbQuery(params);
   },
 
-  verify: async (username, callback) => {
+
+  updatePref: async (prefInfo) => {
+    ({ strava_id, measurement_preference } = {...prefInfo});
     let params = {
-      name: 'check-username-exists',
-      text: `SELECT * FROM gear.users WHERE username = '${username}'`
+      name: 'updatePref',
+      text: `UPDATE gear.users SET measurement_preference = '${measurement_preference}' WHERE strava_id = ${strava_id}`
+    }
+    await dbQuery(params);
+  },
+
+  get: async (req, res) => {
+    let params = {
+      name: 'get-user-data',
+      text: `SELECT * FROM gear.users WHERE username = '${req.query.username}'`
     };
-    let result = await dbQuery(params, callback);
+
+    let userData = (await dbQuery(params))[0];
+    
+    if (req.query.check) { // check if username avail
+      if (userData) {
+        res.send(null);
+      } else {
+        res.send('available')
+      }
+    }
+
+    if (req.query.getData) { // get user data
+      return userData;
+    }
+    
+
   }
 }
 

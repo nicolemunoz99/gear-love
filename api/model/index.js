@@ -11,9 +11,27 @@ const pool = new Pool ({
   max: 10
 });
 
-const dbQuery = async (params, callback) => {
-  let data = await pool.query(params);
-  callback(null, data.rows);
+const dbQuery = async (params) => {
+  return (await pool.query(params)).rows;
 };
+
+// table is string
+// whereVar, updateVars are obj;
+// only accomodates one 'where' condition
+const makeUpdate = async (table, whereVar, updateVars) => { 
+  let setStr = [];
+  for (item in updateVars) {
+    if (typeof updateVars[item] === 'string') {
+      setStr.push(`${item} = '${updateVars[item]}'`);
+    } else {
+      setStr.push(`${item} = ${updateVars[item]}`);
+    }
+  }
+  setStr = setStr.join(', ');
+  let whereKey = Object.keys(whereVar)[0];
+  let whereStr = typeof whereVar[whereKey] === 'string' ?  `${whereKey} = '${whereVar[whereKey]}'` : `${whereKey} = ${whereVar[whereKey]}`;
+
+  let params = {text: `UPDATE ${table} SET ${setStr} WHERE ${whereStr}`};
+}
 
 module.exports = dbQuery;

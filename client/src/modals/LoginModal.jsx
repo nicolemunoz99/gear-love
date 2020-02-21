@@ -26,7 +26,8 @@ const LoginModal = (props) => {
       params: userInputs
     })
       .then(response => {
-        console.log(response.status)
+        console.log(response.status);
+        console.log(response.data);
         if (response.status === 204) {
           updateLoginIsValid(false);
           return;
