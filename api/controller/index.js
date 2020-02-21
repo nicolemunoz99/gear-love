@@ -59,7 +59,7 @@ module.exports = {
       //   headers: { Authorization: `Bearer ${token}` }
       // })).data;
 
-      // EVERY LOGIN: update user table with measurement_preference
+      // EVERY LOGIN
       let measurePref = {
         strava_id: athleteData.id,
         measurement_preference: athleteData.measurement_preference
@@ -67,42 +67,46 @@ module.exports = {
       await userModel.updatePref(measurePref);
 
       let bikesInDb = await bikeModel.get(athleteData.id);     
-      console.log('bikesinDb', bikesInDb); 
 
-      if (bikesInDb.length === 0 && athleteData.bikes.length > 0) { // assume first login
+      // FIRST LOGiN
+      if (bikesInDb.length === 0 && athleteData.bikes.length > 0) { 
         console.log('first login');
 
-          await getTotTimes(athleteData.bikes, token);
-          // await getBikeDetails(athleteData.bikes, token);
-        
+        await getTotTimesAndDetails(athleteData.bikes, token);
+
         addBikePromises = [];
         for (bike of athleteData.bikes) {
           bike.strava_id = athleteData.id;
           let bikePromise = async () => {
 
-            console.log('bike in Promise', bike)
             await bikeModel.post(bike);
           }
           addBikePromises.push(bikePromise());
         }
         await Promise.all(addBikePromises);
-        res.sendStatus(200);
+
+        res.send(athleteData);
         return;
       }
 
       if (bikesInDb) {
-        // check if any new bikes in athleteData and add to DB
-
-        // update distance_current and time_current since last logged activity
         console.log('user has bikes in Db');
+        // TODO: check if any new bikes in athleteData and add to DB
+
+        // TODO: update distance_current and time_current since last logged activity
+        
+        
+        athleteData.bikes = bikesInDb
+        // sendData;
+        res.send(athleteData);
+        return;
       }
+
 
       if (!bikesInDb && athleteData.bikes.length === 0) {
         // prompt user to add bikes via Strava
       }
 
-
-      res.send(athleteData);
 
     }
 
@@ -129,13 +133,14 @@ const refreshToken = async (refreshToken) => {
 };
 
 
-const getTotTimes = async (bikes, token) => {
+const getTotTimesAndDetails = async (bikes, token) => {
   let bikeIds = [];
   bikes.forEach(bike => { 
     bikeIds.push(bike.id);
     bike.time_current = 0;
   });
 
+  // bike details
   for (bike of bikes) {
     let details = (await axios.get(`${urls.stravaApi}/gear/${bike.id}`, {
       headers: { Authorization: `Bearer ${token}` }
@@ -145,7 +150,6 @@ const getTotTimes = async (bikes, token) => {
     bike.model_name=details.model_name;
     bike.frame_type=details.frame_type;
     bike.description=details.description;
-    console.log('BIKE', bike)
   }
 
   // total times
@@ -174,16 +178,3 @@ const getTotTimes = async (bikes, token) => {
   }
   return bikes;
 }
-
-// const getBikeDetails = async (bike, token) => {
-  
-//   let details = (await axios.get(`${urls.stravaApi}/gear/${bike.id}`, {
-//     headers: { Authorization: `Bearer ${token}` }
-//   })).data;
-
-//   bike.brand_name=details.brand_name;
-//   bike.model_name=details.model_name;
-//   bike.frame_type=details.frame_type;
-//   bike.description=details.description;
-//   return bike;
-// }
