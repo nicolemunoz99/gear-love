@@ -48,7 +48,8 @@
 }
 
 .chain-love {
-  background-image: linear-gradient(to right, rgb(158, 28, 184) , yellow);
+  /* background-image: linear-gradient(to right, rgb(158, 28, 184) , yellow); */
+  background-image: linear-gradient(to right, rgb(37, 37, 37) , rgb(185, 185, 184));
   height: 4rem;
 }
 
@@ -101,4 +102,19 @@ button:hover {
 
 .cursor-pointer {
   cursor: pointer;
+}
+
+.vertical-align-hack {
+  position: relative;
+  top: 50%;
+  transform: translateY(-50%);
+}
+
+.full-height {
+  pointer-events: none;
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 100%;
+  width: 100%;
 }

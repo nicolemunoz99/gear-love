@@ -15,10 +15,10 @@ const dbQuery = async (params) => {
   return (await pool.query(params)).rows;
 };
 
-// table is string
-// whereVar, updateVars are obj;
+// table: string
+// whereVar, updateVars: obj
 // only accomodates one 'where' condition
-const makeUpdate = async (table, whereVar, updateVars) => { 
+const update = async (table, whereVar, updateVars) => { 
   let setStr = [];
   for (item in updateVars) {
     if (typeof updateVars[item] === 'string') {
@@ -34,4 +34,29 @@ const makeUpdate = async (table, whereVar, updateVars) => {
   let params = {text: `UPDATE ${table} SET ${setStr} WHERE ${whereStr}`};
 }
 
-module.exports = dbQuery;
+const insert = async (table, keyValues) => {
+  for (key in keyValues) {
+    if (keyValues[key] === null || keyValues[key] === undefined || keyValues[key].length === 0)  {
+      delete keyValues[key]
+    }
+  }
+
+  let valuesStr = [];
+  for (let i = 1; i <= Object.keys(keyValues).length; i++) valuesStr.push(`$${i}`);
+  valuesStr = valuesStr.join(', ');
+
+  params = {
+    name: 'post-a-part',
+    text: `INSERT INTO ${table} ` +
+          `(${Object.keys(keyValues)}) ` + 
+          `VALUES(${valuesStr}) RETURNING *`,
+    values: [...Object.values(keyValues)]
+  };
+  let newEntry = await dbQuery(params);
+  return newEntry;
+}
+
+
+
+
+module.exports = {dbQuery, insert}

@@ -108,14 +108,7 @@ const SignupModal = (props) => {
                 <button onClick={handleFormSubmit} className="btn btn-outline-dark full-width">Register with Chainlove</button>
               </div>
             </div>
-            <div className="container">
-              <div className="row">
-                <div className="col-12 text-center">
-                  Already have a Chain Love account?
-          <div onClick={switchToLogin} className="cursor-pointer"><u>Log in</u></div>
-                </div>
-              </div>
-            </div>
+            
           </div>
           : null
         }
@@ -136,6 +129,14 @@ const SignupModal = (props) => {
           </div>
           : null
         }
+        <div className="container">
+              <div className="row">
+                <div className="col-12 text-center">
+                  Already have a Chain Love account?
+          <div onClick={switchToLogin} className="cursor-pointer"><u>Log in</u></div>
+                </div>
+              </div>
+            </div>
 
       </form>
     </Modal>

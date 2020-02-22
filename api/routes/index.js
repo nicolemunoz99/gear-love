@@ -10,6 +10,8 @@ const userModel = require('../model/userModel.js');
 // router.delete('/:bikeId', bikes.delete);
 
 router.get('/parts', partModel.get);
+router.post('/parts', partModel.postOrUpdate);
+router.put('/parts', partModel.postOrUpdate);
 // router.post('/:bikeId/parts', parts.post);
 // router.delete('/parts/:partId', parts.delete);
 // router.put('/parts/:partId', parts.put);

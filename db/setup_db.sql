@@ -39,13 +39,14 @@ CREATE TABLE IF NOT EXISTS gear.bikes(
 CREATE TABLE IF NOT EXISTS gear.parts(
   part_id SERIAL primary key NOT NULL,
   bike_id VARCHAR,
-  dist_on_add INT,
-  time_on_add INT,
   type VARCHAR,
+  custom_type VARCHAR,
   brand VARCHAR,
   model VARCHAR,
-  lifespan_dist INT,
-  lifespan_time INT,
+  dist_on_add DECIMAL,
+  time_on_add DECIMAL,
+  lifespan_dist DECIMAL,
+  lifespan_time DECIMAL,
   tracking_method VARCHAR,
   useage_metric VARCHAR
 );

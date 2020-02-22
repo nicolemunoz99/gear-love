@@ -35,7 +35,6 @@ module.exports = {
       
       req.query.getData = true;
       let userInfo = await userModel.get(req, null);
-      console.log('userfin', userInfo)
       if ((userInfo && userInfo.pw !== req.query.pw) || !userInfo) { // username/pw doesn't exist
         res.sendStatus(204);
         return; 
@@ -45,7 +44,7 @@ module.exports = {
 
       // if auth token expires within 30 minutes
       if (userInfo.expires_at - Date.now() / 1000 < 60 * 30) {
-        console.log('expired token. Getting new...')
+        console.log('expired token. contacting strava for new...')
         let refreshedData = await refreshToken(userInfo.refresh_token); // new token from strava
         refreshedData.username = userInfo.username;
         await userModel.stravaRefresh(refreshedData); // update users table
@@ -98,7 +97,6 @@ module.exports = {
         
         
         athleteData.bikes = bikesInDb
-        console.log(athleteData);
         // sendData;
         res.send(athleteData);
         return;
@@ -130,7 +128,7 @@ const refreshToken = async (refreshToken) => {
     `&grant_type=refresh_token`;
 
   let response = await axios.post(`https://www.strava.com/oauth/token${stravaRefreshQuery}`)
-  console.log('refreshed tokens:', response.data);
+  console.log('contacted Strava. Refreshed tokens:', response.data);
   return response.data;
 };
 
@@ -144,6 +142,7 @@ const getTotTimesAndDetails = async (bikes, token) => {
 
   // bike details
   for (bike of bikes) {
+    console.log('contacting strava...')
     let details = (await axios.get(`${urls.stravaApi}/gear/${bike.id}`, {
       headers: { Authorization: `Bearer ${token}` }
     })).data;
@@ -154,7 +153,8 @@ const getTotTimesAndDetails = async (bikes, token) => {
     bike.description=details.description;
   }
 
-  // total times
+  console.log('contacting strava...')
+  // total times for each bike
   page = 1;
   while (true) {
     let activities = (await axios.get(`${urls.stravaApi}/athlete/activities?page=${page}`, {

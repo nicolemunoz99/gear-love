@@ -1,4 +1,4 @@
-const dbQuery = require('./index.js');
+const dbQuery = require('./index.js').dbQuery;
 
 
 module.exports =  {

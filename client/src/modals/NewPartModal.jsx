@@ -1,13 +1,17 @@
 import React, { useState, useEffect } from 'react';
 import Modal from './Modal.jsx';
 import PartTypeDropdownItem from './PartTypeDropdownItem.jsx';
+import axios from 'axios';
+import urls from '../../../urls.js';
+
+const tempBikeId = "b75929";
 
 const initFormVals = {
   type: '', custom_type: '', brand: '', model: '',
   dist_on_add: '', time_on_add: '',
   lifespan_dist: '', lifespan_time: '',
   tracking_method: null, useage_metric: null
-}
+};
 
 const NewPartModal = (props) => {
   const [partList, updateNA] = useState(['Chain', 'Freehub', 'Suspension Fork', 'Cassette', '--- CUSTOM ---'])
@@ -17,7 +21,6 @@ const NewPartModal = (props) => {
 
   const updatePartHandler = (partType) => {
     let tempState = JSON.parse(JSON.stringify(initFormVals));
-    console.log('tempState', tempState)
     tempState["type"] = partType;
     updateInputs(tempState);
   }
@@ -26,19 +29,28 @@ const NewPartModal = (props) => {
     e.preventDefault();
     console.log('submit')
     let tempErrorList = [];
+    
     if (!userInputs.tracking_method) tempErrorList.push('tracking method');
     if (!userInputs.type) tempErrorList.push('part type');
+
     if (userInputs.tracking_method === 'custom') {
       if (!userInputs.useage_metric) tempErrorList.push('useage metric');
-      if (!userInputs.dist_on_add && !userInputs.time_on_add) tempErrorList.push('current wear');
-      if (!userInputs.lifespan_dist && !userInputs.lifespan_dist) tempErrorList.push('life/service interval');
+      if ((!userInputs.dist_on_add && !userInputs.time_on_add) || 
+            Number(userInputs.dist_on_add) < 0 || Number(userInputs.time_on_add) < 0) {
+        tempErrorList.push('current wear')
+      };
+      if ((!userInputs.lifespan_dist && !userInputs.lifespan_time) || 
+            Number(userInputs.lifespan_dist) < 0 || Number(userInputs.lifespan_time) < 0) {
+        tempErrorList.push('life/service interval')
+      };
     }
-    if (tempErrorList.length > 0 ) {
+
+    if (tempErrorList.length > 0) {
       updateErrors(tempErrorList);
       return;
     }
 
-    let postStatus = (await axios.post(`${urls.api}/parts/${props.bikeId}`)).status
+    let postStatus = (await axios.post(`${urls.api}/parts?newPart=true&bike_id=${props.bikeId ? props.bikeId : tempBikeId}`, userInputs)).status;
     if (postStatus === 200) {
       props.changeModal('postSuccess');
     }
@@ -51,18 +63,10 @@ const NewPartModal = (props) => {
     updateInputs(tempState);
   }
 
-  const selectTracking = (e) => {
+  const selectRadio = (e) => {
     let tempState = JSON.parse(JSON.stringify(userInputs));
-    tempState.tracking_method = e.target.value;
     resetCustomInputs(tempState);
-    tempState.useage_metric = '';
-    updateInputs(tempState);
-  }
-
-  const selectUseageMetric = (e) => {
-    let tempState = JSON.parse(JSON.stringify(userInputs));
-    tempState.useage_metric = e.target.value;
-    resetCustomInputs(tempState);
+    tempState[e.target.name] = e.target.value;
     updateInputs(tempState);
   }
 
@@ -118,19 +122,19 @@ const NewPartModal = (props) => {
           <div className="col-sm-8">
 
             <div className="custom-control custom-radio custom-control-inline">
-              <input onClick={selectTracking} type="radio" name="customRadioInline1" readOnly={true}
+              <input onClick={selectRadio} type="radio" name="tracking_method" readOnly={true}
                 checked={userInputs.tracking_method === 'custom' ? true : false}
                 id="custom" value="custom" className="custom-control-input" >
               </input>
-              <label className="custom-control-label" for="custom">Custom</label>
+              <label className="custom-control-label" htmlFor="custom">Custom</label>
             </div>
             <div className="custom-control custom-radio custom-control-inline">
-              <input onClick={selectTracking} type="radio" name="customRadioInline1" readOnly={true}
+              <input onClick={selectRadio} type="radio" name="tracking_method" readOnly={true}
                 id="default-spec" value="default" className="custom-control-input"
                 checked={userInputs.tracking_method === 'default' ? true : false}
                 disabled={userInputs.type.toLowerCase().indexOf('custom') >= 0 ? true : false}>
               </input>
-              <label className="custom-control-label" for="default-spec">Default</label>
+              <label className="custom-control-label" htmlFor="default-spec">Default</label>
             </div>
           </div>
         </div>
@@ -144,7 +148,7 @@ const NewPartModal = (props) => {
             <div className="row my-5 justify-content-md-center">
               <div className="col-xs-auto">
                 <p>
-                  The default service/replacement interval for a <u>{userInputs.type}</u> is ---
+                  The default service/replacement interval for a <u>{userInputs.type}</u> is -TO DO-
                 </p>
                 <p>
                   "Default" tacking assumes this component is new. If you would like 
@@ -164,17 +168,17 @@ const NewPartModal = (props) => {
               <div className="col-sm-8">
 
                 <div className="custom-control custom-radio custom-control-inline">
-                  <input onClick={selectUseageMetric} type="radio"
-                    id="distance" value="distance" name="customRadioInline2" className="custom-control-input">
+                  <input onClick={selectRadio} type="radio"
+                    id="distance" value="distance" name="useage_metric" className="custom-control-input">
                   </input>
-                  <label className="custom-control-label" for="distance">Distance</label>
+                  <label className="custom-control-label" htmlFor="distance">Distance</label>
                 </div>
 
                 <div className="custom-control custom-radio custom-control-inline">
-                  <input onClick={selectUseageMetric} type="radio"
-                    id="hours" value="hours" name="customRadioInline2" className="custom-control-input">
+                  <input onClick={selectRadio} type="radio"
+                    id="hours" value="hours" name="useage_metric" className="custom-control-input">
                   </input>
-                  <label className="custom-control-label" for="hours">Hours</label>
+                  <label className="custom-control-label" htmlFor="hours">Hours</label>
                 </div>
 
               </div>
@@ -193,8 +197,8 @@ const NewPartModal = (props) => {
                       {userInputs.useage_metric.toUpperCase()} {userInputs.useage_metric === 'distance' ? `(${props.distUnits}) ` : null}
                       to date?
                     </div>
-
                   </label>
+
                   <div className="col-sm-4"></div>
                   <div className="col-sm-8">
                     <input onChange={inputText} type="number" className="form-control"
@@ -221,11 +225,11 @@ const NewPartModal = (props) => {
                   </div>
                 </div>
 
-                { errorList.length > 0 ?
+                {errorList.length > 0 ?
                 <div className="row my-5 justify-content-center">
                   <div className="col-xs-auto error-text">
                     <div>
-                    Must specify 
+                    Please enter a valid value 
                     <ul>
                     {errorList.map(error => {
                       return (
@@ -264,9 +268,10 @@ const NewPartModal = (props) => {
   )
 }
 
-export default NewPartModal
+export default NewPartModal;
 
 const resetCustomInputs = (inputs) => {
+  inputs.useage_metric = '';
   inputs.dist_on_add = '';
   inputs.time_on_add = '';
   inputs.lifespan_dist = '';

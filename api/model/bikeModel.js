@@ -1,4 +1,4 @@
-const dbQuery = require('./index.js')
+const {dbQuery, insert} = require('./index.js');
 
 const bikeModel = {
   get: async (stravaId) => {
@@ -6,7 +6,7 @@ const bikeModel = {
       name: 'get-bikes',
       text: `SELECT * FROM gear.bikes WHERE strava_id = ${stravaId}`
     }
-    let bikes = (await dbQuery(params))
+    let bikes = await dbQuery(params)
     return bikes;
   },
 
