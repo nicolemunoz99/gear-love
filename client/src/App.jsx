@@ -16,7 +16,7 @@ const App = (props) => {
   const [userProfile, setProfile] = useState(profileData);
   const [currentBike, changeBike] = useState({});
   const [partsList, changeParts] = useState([]);
-  const [modal, changeModal] = useState('newPart'); // null, signup, login, newPart
+  const [modal, changeModal] = useState('newPart'); // null, signup, login, newPart, postSuccess
   
   const [view, changeView] = useState('bikeList'); // bikeList, parts, newPartForm
 

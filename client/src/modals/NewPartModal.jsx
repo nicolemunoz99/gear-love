@@ -12,6 +12,7 @@ const initFormVals = {
 const NewPartModal = (props) => {
   const [partList, updateNA] = useState(['Chain', 'Freehub', 'Suspension Fork', 'Cassette', '--- CUSTOM ---'])
   const [userInputs, updateInputs] = useState(initFormVals);
+  const [errorList, updateErrors] = useState([]);
 
 
   const updatePartHandler = (partType) => {
@@ -21,14 +22,33 @@ const NewPartModal = (props) => {
     updateInputs(tempState);
   }
 
+  const submitForm = async (e) => {
+    e.preventDefault();
+    console.log('submit')
+    let tempErrorList = [];
+    if (!userInputs.tracking_method) tempErrorList.push('tracking method');
+    if (!userInputs.type) tempErrorList.push('part type');
+    if (userInputs.tracking_method === 'custom') {
+      if (!userInputs.useage_metric) tempErrorList.push('useage metric');
+      if (!userInputs.dist_on_add && !userInputs.time_on_add) tempErrorList.push('current wear');
+      if (!userInputs.lifespan_dist && !userInputs.lifespan_dist) tempErrorList.push('life/service interval');
+    }
+    if (tempErrorList.length > 0 ) {
+      updateErrors(tempErrorList);
+      return;
+    }
+
+    let postStatus = (await axios.post(`${urls.api}/parts/${props.bikeId}`)).status
+    if (postStatus === 200) {
+      props.changeModal('postSuccess');
+    }
+  }
+
   const inputText = (e) => {
+    if (e.target.value.length > 15) return;
     let tempState = JSON.parse(JSON.stringify(userInputs));
     tempState[e.target.id] = e.target.value;
     updateInputs(tempState);
-  }
-
-  const submitForm = (e) => {
-
   }
 
   const selectTracking = (e) => {
@@ -91,9 +111,10 @@ const NewPartModal = (props) => {
         </div>
 
 
-
+        {userInputs.type ?
         <div className="form-group row mt-5 align-items-end" id="tracking-method-choice">
-          <label className="col-sm-4 col-form-label">Default tracking or customize specification? </label>
+          <label className="col-sm-12 col-form-label">Default tracking or customize specification? </label>
+          <div className="col-sm-4"></div>
           <div className="col-sm-8">
 
             <div className="custom-control custom-radio custom-control-inline">
@@ -113,17 +134,25 @@ const NewPartModal = (props) => {
             </div>
           </div>
         </div>
+        :
+        null
+        }
 
-        {userInputs.tracking_method === 'default' ?
+
+        {userInputs.tracking_method === 'default' && userInputs.type?
           <div>
             <div className="row my-5 justify-content-md-center">
-              <div className="col-xs-auto strong-text">
-                You will receive a notice to service (or replace) this part in **TO DO**
+              <div className="col-xs-auto">
+                <p>
+                  The default service/replacement interval for a <u>{userInputs.type}</u> is ---
+                </p>
+                <p>
+                  "Default" tacking assumes this component is new. If you would like 
+                  to specify the current wear, select "custom" tracking above.
+                </p>
               </div>
             </div>
-            <div className="row justify-content-center">
-              <button onClick={submitForm} className="btn btn-outline-dark">Submit</button>
-            </div>
+            
           </div>
           : null
         }
@@ -192,16 +221,26 @@ const NewPartModal = (props) => {
                   </div>
                 </div>
 
-
-                {/* <div className="row my-5 justify-content-md-center">
-                  <div className="col-xs-auto strong-text">
-                    You will receive a notice to check, service or replace this part in **TO DO**
+                { errorList.length > 0 ?
+                <div className="row my-5 justify-content-center">
+                  <div className="col-xs-auto error-text">
+                    <div>
+                    Must specify 
+                    <ul>
+                    {errorList.map(error => {
+                      return (
+                        <li>{error}</li>
+                      )}
+                    )}
+                    </ul>
+                    </div>
                   </div>
-                </div> */}
-
-                <div className="row justify-content-center mt-4">
-                  <button onClick={submitForm} className="btn btn-outline-dark full-width">Submit</button>
                 </div>
+                :
+                null
+                }
+
+                
               </div>
               : null
             }
@@ -209,6 +248,14 @@ const NewPartModal = (props) => {
           </div>
           : null
         }
+
+      {userInputs.useage_metric || (userInputs.tracking_method === 'default' && userInputs.type) ?
+        <div className="row justify-content-center mt-4">
+          <button onClick={submitForm} className="btn btn-outline-dark full-width">Submit</button>
+        </div>
+      :
+      null
+      }
 
       </form>
 
