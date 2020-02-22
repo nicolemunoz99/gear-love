@@ -6,9 +6,7 @@ const BikePanel = (props) => {
   const showComponents = (e) => {
     props.handleBikeSelect(props.bike)
   }
-  const showNewPartForm = (e) => {
-    props.viewHandler('newPartForm')
-  }
+
 
   return (
     <div className="col-md-3 border border-dark rounded shadow m-2 p-2">
@@ -18,7 +16,6 @@ const BikePanel = (props) => {
       </div>
       <div className="mt-2 mb-2">Total Miles: {props.bike.distance}</div>
       <button onClick={showComponents} className="btn btn-secondary btn-sm mb-2">View my components</button>
-      {/* <button onClick={showNewPartForm} className="btn btn-outline-dark">Add a component to track</button> */}
     </div>
   );
 }

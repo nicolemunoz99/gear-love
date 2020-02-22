@@ -1,24 +1,22 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import api from '../api.js'
+
 
 import profileData from './sampleData/userProfile.js'; // eventually delete
-import bikePhotos from './sampleData/bikePhotos.js'; // eventually delete
 
 import BikesList from './BikesList.jsx';
 import PartsList from './PartsList.jsx';
 import ModalIndex from './modals/ModalIndex.jsx';
 import cookie from '../helperFuncs/cookie.js';
 import urls from '../../urls.js';
-import strava from '../stravaAccess.js';
 
 
 const App = (props) => {
   const [sessionId, updateSessionId] = useState(null);
   const [userProfile, setProfile] = useState(profileData);
-  const [currentBike, changeBike] = useState(null);
-  const [partsList, changeParts] = useState(null);
-  const [modal, changeModal] = useState('login'); // null, signup, login, newPart
+  const [currentBike, changeBike] = useState({});
+  const [partsList, changeParts] = useState([]);
+  const [modal, changeModal] = useState('newPart'); // null, signup, login, newPart
   
   const [view, changeView] = useState('bikeList'); // bikeList, parts, newPartForm
 
@@ -28,32 +26,21 @@ const App = (props) => {
     if (tempSessionId !== sessionId) { updateSessionId(tempSessionId) }
   }, []);
 
-  const stravaGetData = () => {
-    axios.get(`${urls.api}/strava`)
-      .then(response => {
-        console.log('login response: ', response);
-      })
-  };
+  const handleSignUp = () => {
+    changeModal('signup')
+  }
+
+  let distUnits = userProfile.measurement_preference === 'feet' ? 'miles' : 'km'
 
   
 
-  userProfile.bikes.forEach(bike => {
-    bikePhotos.forEach(photo => {
-      if (photo.bikeId === bike.id) {
-        bike.url = photo.url
-      }
-    });
-  })
+  const handleBikeSelect = async (bike) => {
+    let parts = (await axios.get(`${urls.api}/parts?bike_id=${bike.bike_id}`)).data;
+    console.log('parts', parts)
+    changeParts(parts);
+    changeBike(bike);
+    changeView('parts');
 
-  const handleBikeSelect = (bikeInfo) => {
-    fetch(`${api}/${bikeInfo.id}/parts`)
-      .then(response => response.json())
-      .then(partsData => {
-        console.log(partsData)
-        changeParts(partsData);
-        changeBike(bikeInfo);
-        changeView('parts')
-      })
   };
 
   const viewHandler = (view, modal) => {
@@ -65,17 +52,11 @@ const App = (props) => {
       <div className="container">
         <div className="row">
           <div className="col-12">
-            <a href={`https://www.strava.com/oauth/authorize` +
-                      `?client_id=${strava.clientId}` +
-                      `&response_type=code` +
-                      `&redirect_uri=${urls.api}/signup/${sessionId}` +
-                      `&approval_prompt=force&scope=read`}> 
-              Register via Strava Oauth 2
-            </a>
+            
             
           </div>
-          <div className="col-12">
-            <button onClick={stravaGetData}>Load data</button>
+          <div className="col-12 mb-4">
+            <button onClick={handleSignUp}> Sign Up</button>
           </div>
         </div>
       </div>
@@ -90,16 +71,27 @@ const App = (props) => {
 
         {view === 'bikeList' || view === 'newPartForm' ?
           <BikesList viewHandler={viewHandler}
-            handleBikeSelect={handleBikeSelect}
-            bikeList={userProfile.bikes}
+                      handleBikeSelect={handleBikeSelect}
+                      userProfile={userProfile}
+                      distUnits={distUnits}
           />
           : null
         }
         {view === 'parts' || view === 'newPartForm' ?
-          <PartsList viewHandler={viewHandler} changeModal={changeModal} refreshPartsList={handleBikeSelect} currentBike={currentBike} partsList={partsList} />
+          <PartsList viewHandler={viewHandler}
+                      changeModal={changeModal}
+                      refreshPartsList={handleBikeSelect}
+                      currentBike={currentBike}
+                      partsList={partsList}
+          />
           : null
         }
-        <ModalIndex modal={modal} changeModal={changeModal}/>
+        <ModalIndex distUnits={distUnits} 
+                    bikeId={currentBike.bike_id}
+                    setProfile={setProfile} 
+                    modal={modal} 
+                    changeModal={changeModal}
+        />
       </div>
     </div>
 

@@ -9,7 +9,7 @@ const ModalIndex = (props) => {
   return (
     <div>
       {props.modal === 'newPart' ?
-        <NewPartModal changeModal={props.changeModal}/>
+        <NewPartModal bikeId={props.bikeId} distUnits={props.distUnits} changeModal={props.changeModal}/>
         : null
       }
       {props.modal === 'signup' ?
@@ -17,7 +17,7 @@ const ModalIndex = (props) => {
         : null
       }
       {props.modal === 'login' ?
-        <LoginModal changeModal={props.changeModal} />
+        <LoginModal setProfile={props.setProfile} changeModal={props.changeModal} />
         : null
       }
     </div>

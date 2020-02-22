@@ -19,21 +19,18 @@ const LoginModal = (props) => {
     updateUserInputs(tempState);
   };
 
-  const handleLoginSubmit = (e) => {
+  const handleLoginSubmit = async (e) => {
     e.preventDefault();
-    console.log(userInputs);
-    axios.get(`${urls.api}/users/login`, {
-      params: userInputs
-    })
-      .then(response => {
-        console.log(response.status);
-        console.log(response.data);
-        if (response.status === 204) {
-          updateLoginIsValid(false);
-          return;
-        }
+    let userProfile = (await axios.get(`${urls.api}/users/login`, {params: userInputs})).data;
+    console.log('up', userProfile);
+    if (!userProfile) {
+      updateLoginIsValid(false);
+      return;
+    }
+    updateLoginIsValid(true);
+        // props.setProfile(JSON.parse(JSON.stringify()))
 
-      })
+      
   };
 
   const switchToSignup = () => { props.changeModal('signup'); }

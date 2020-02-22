@@ -1,11 +1,10 @@
 const bikeModel = require('../model/bikeModel.js');
-const partModel = require('../model/partModel.js');
 const userModel = require('../model/userModel.js');
 const axios = require('axios');
 const strava = require('../stravaAccess.js');
 const urls = require('../../urls.js');
 
-const athleteData = require('../athleteData.js');
+// const athleteData = require('../athleteData.js');
 
 module.exports = {
 
@@ -36,8 +35,8 @@ module.exports = {
       
       req.query.getData = true;
       let userInfo = await userModel.get(req, null);
-
-      if (userInfo && userInfo.pw !== req.query.pw) { // username/pw doesn't exist
+      console.log('userfin', userInfo)
+      if ((userInfo && userInfo.pw !== req.query.pw) || !userInfo) { // username/pw doesn't exist
         res.sendStatus(204);
         return; 
       }; 
@@ -54,12 +53,15 @@ module.exports = {
         token = refreshedData.access_token;
       }
 
-      // // get athlete data
-      // let athleteData = (await axios.get(`${urls.stravaApi}/athlete`, {
-      //   headers: { Authorization: `Bearer ${token}` }
-      // })).data;
 
       // EVERY LOGIN
+
+      // get athlete data
+      let athleteData = (await axios.get(`${urls.stravaApi}/athlete`, {
+        headers: { Authorization: `Bearer ${token}` }
+      })).data;
+      
+      // update measurement pref
       let measurePref = {
         strava_id: athleteData.id,
         measurement_preference: athleteData.measurement_preference
@@ -78,7 +80,6 @@ module.exports = {
         for (bike of athleteData.bikes) {
           bike.strava_id = athleteData.id;
           let bikePromise = async () => {
-
             await bikeModel.post(bike);
           }
           addBikePromises.push(bikePromise());
@@ -97,6 +98,7 @@ module.exports = {
         
         
         athleteData.bikes = bikesInDb
+        console.log(athleteData);
         // sendData;
         res.send(athleteData);
         return;

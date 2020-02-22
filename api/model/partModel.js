@@ -1,13 +1,12 @@
 const dbQuery = require ('./index.js');
 
 const partModel = {
-  get: async (bikeId, toController) => {
+  get: async (req, res) => {
     let params = {
-      name: 'get-parts',
       text: 'SELECT * FROM gear.parts where bike_id = $1',
-      values: [bikeId]
-    }
-    let data = await dbQuery(params, toController)
+      values: [req.query.bike_id]
+    };
+    res.send(await dbQuery(params));
   },
 
   post: async (partData, toController) => {
@@ -19,30 +18,6 @@ const partModel = {
     };
     dbQuery(params, toController);
     let data = await dbQuery;
-  },
-
-  delete: async (partId, toController) => {
-    let params = {
-      name: 'delete-a-part',
-      text: 'DELETE FROM gear.parts WHERE part_id = $1',
-      values: [partId]
-    };
-    dbQuery(params, toController);
-    let data = await dbQuery;
-  },
-
-  put: async (partId, dataToUpdate, toController) => {
-    let field = Object.keys(dataToUpdate)[0];
-    let updateValue = Number(dataToUpdate[field]);
-    console.log(updateValue, Number(updateValue))
-    let params = {
-      name: 'update-a-part',
-      text: `UPDATE gear.parts SET ${field} = $1 WHERE part_id = ${partId}`,
-      values: [updateValue]
-    }
-    dbQuery(params, toController);
-    let data = await dbQuery;
-
   }
 }
 

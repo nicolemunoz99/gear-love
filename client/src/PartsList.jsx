@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react';
 import Part from './Part.jsx'
 import axios from 'axios';
-import api from '../api.js'
+import urls from '../../urls.js'
 
 
 const PartsList = (props) => {
@@ -16,7 +16,7 @@ const PartsList = (props) => {
   );
 
   const handleDeletePart = (partId) => {
-    axios.delete(`${api}/parts/${partId}`)
+    axios.delete(`${urls.api}/parts/${partId}`)
       .then(() => {
         props.refreshPartsList(props.currentBike);
       })

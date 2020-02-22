@@ -47,7 +47,6 @@ module.exports =  {
 
   get: async (req, res) => {
     let params = {
-      name: 'get-user-data',
       text: `SELECT * FROM gear.users WHERE username = '${req.query.username}'`
     };
 

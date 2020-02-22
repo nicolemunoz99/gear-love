@@ -4,19 +4,19 @@ import PartTypeDropdownItem from './PartTypeDropdownItem.jsx';
 
 const initFormVals = {
   type: '', custom_type: '', brand: '', model: '',
-  dist_on_add: null, time_on_add: null,
-  lifespan_dist: null, lifespan_time: null,
+  dist_on_add: '', time_on_add: '',
+  lifespan_dist: '', lifespan_time: '',
   tracking_method: null, useage_metric: null
 }
 
 const NewPartModal = (props) => {
   const [partList, updateNA] = useState(['Chain', 'Freehub', 'Suspension Fork', 'Cassette', '--- CUSTOM ---'])
   const [userInputs, updateInputs] = useState(initFormVals);
-  const [showCustomSection, updateShowCustomSection] = useState(false);
-  const [showDefaultInfo, updateShowDefaultInfo] = useState(false);
+
 
   const updatePartHandler = (partType) => {
-    let tempState = JSON.parse(JSON.stringify(initFormVals))
+    let tempState = JSON.parse(JSON.stringify(initFormVals));
+    console.log('tempState', tempState)
     tempState["type"] = partType;
     updateInputs(tempState);
   }
@@ -33,15 +33,16 @@ const NewPartModal = (props) => {
 
   const selectTracking = (e) => {
     let tempState = JSON.parse(JSON.stringify(userInputs));
-    tempState['tracking_method'] = e.target.value;
+    tempState.tracking_method = e.target.value;
+    resetCustomInputs(tempState);
+    tempState.useage_metric = '';
     updateInputs(tempState);
-    let nextElement = document.getElementById('tracking-method-choice').nextSibling
-    nextElement.scrollIntoView();
   }
 
   const selectUseageMetric = (e) => {
     let tempState = JSON.parse(JSON.stringify(userInputs));
-    tempState['useage_metric'] = e.target.value;
+    tempState.useage_metric = e.target.value;
+    resetCustomInputs(tempState);
     updateInputs(tempState);
   }
 
@@ -54,33 +55,38 @@ const NewPartModal = (props) => {
           <div className="col-sm-8">
 
             <div className="dropdown">
-              <button className="btn btn-outline-dark dropdown-toggle full-width" type="button" id="partTypeDropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+              <button className="btn btn-outline-dark dropdown-toggle full-width" type="button"
+                id="partTypeDropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                 {userInputs.type ? userInputs.type : 'Type'}
               </button>
               <div className="dropdown-menu full-width" aria-labelledby="dropdownMenuButton">
                 {
                   partList.map(part => {
                     return (
-                      <PartTypeDropdownItem updatePartHandler={updatePartHandler} part={part} />
+                      <PartTypeDropdownItem key={part} updatePartHandler={updatePartHandler} part={part} />
                     )
                   })
                 }
               </div>
             </div>
             {userInputs.type.toLowerCase().indexOf('custom') >= 0 ?
-            <div className="form-group full-width mt-1">
-              <input onChange={inputText} value={userInputs.custom_type} type="text" className="form-control" id="custom_type" placeholder="Part type"></input>
-            </div>
-            : null
+              <div className="form-group full-width mt-1">
+                <input onChange={inputText} value={userInputs.custom_type} type="text" className="form-control"
+                  id="custom_type" placeholder="Part type">
+                </input>
+              </div>
+              : null
             }
           </div>
         </div>
         <div className="form-group row justify-content-end">
           <div className="col-sm-4 mb-2">
-            <input onChange={inputText} value={userInputs.brand} type="text" className="form-control" id="brand" placeholder="Brand (optional)"></input>
+            <input onChange={inputText} value={userInputs.brand} type="text" className="form-control"
+              id="brand" placeholder="Brand (optional)"></input>
           </div>
           <div className="col-sm-4">
-            <input onChange={inputText} value={userInputs.model} type="text" className="form-control" id="model" placeholder="Model (optional)"></input>
+            <input onChange={inputText} value={userInputs.model} type="text" className="form-control"
+              id="model" placeholder="Model (optional)"></input>
           </div>
         </div>
 
@@ -91,13 +97,15 @@ const NewPartModal = (props) => {
           <div className="col-sm-8">
 
             <div className="custom-control custom-radio custom-control-inline">
-              <input onClick={selectTracking} type="radio" id="custom" value="custom" name="customRadioInline1" className="custom-control-input"
-                checked={userInputs.tracking_method === 'custom' ? true : false}>
+              <input onClick={selectTracking} type="radio" name="customRadioInline1" readOnly={true}
+                checked={userInputs.tracking_method === 'custom' ? true : false}
+                id="custom" value="custom" className="custom-control-input" >
               </input>
               <label className="custom-control-label" for="custom">Custom</label>
             </div>
             <div className="custom-control custom-radio custom-control-inline">
-              <input onClick={selectTracking} type="radio" id="default-spec" value="default" name="customRadioInline1" className="custom-control-input"
+              <input onClick={selectTracking} type="radio" name="customRadioInline1" readOnly={true}
+                id="default-spec" value="default" className="custom-control-input"
                 checked={userInputs.tracking_method === 'default' ? true : false}
                 disabled={userInputs.type.toLowerCase().indexOf('custom') >= 0 ? true : false}>
               </input>
@@ -109,7 +117,9 @@ const NewPartModal = (props) => {
         {userInputs.tracking_method === 'default' ?
           <div>
             <div className="row my-5 justify-content-md-center">
-              <div className="col-xs-auto strong-text">You will receive a notice to service (or replace) this part in **TO DO**</div>
+              <div className="col-xs-auto strong-text">
+                You will receive a notice to service (or replace) this part in **TO DO**
+              </div>
             </div>
             <div className="row justify-content-center">
               <button onClick={submitForm} className="btn btn-outline-dark">Submit</button>
@@ -125,12 +135,16 @@ const NewPartModal = (props) => {
               <div className="col-sm-8">
 
                 <div className="custom-control custom-radio custom-control-inline">
-                  <input onClick={selectUseageMetric} type="radio" id="distance" value="distance" name="customRadioInline2" className="custom-control-input"></input>
+                  <input onClick={selectUseageMetric} type="radio"
+                    id="distance" value="distance" name="customRadioInline2" className="custom-control-input">
+                  </input>
                   <label className="custom-control-label" for="distance">Distance</label>
                 </div>
 
                 <div className="custom-control custom-radio custom-control-inline">
-                  <input onClick={selectUseageMetric} type="radio" id="hours" value="hours" name="customRadioInline2" className="custom-control-input"></input>
+                  <input onClick={selectUseageMetric} type="radio"
+                    id="hours" value="hours" name="customRadioInline2" className="custom-control-input">
+                  </input>
                   <label className="custom-control-label" for="hours">Hours</label>
                 </div>
 
@@ -139,26 +153,54 @@ const NewPartModal = (props) => {
 
             {userInputs.useage_metric ?
               <div>
+
                 <div className="form-group row mt-5 align-items-end">
-                  <label className="col-sm-4 col-form-label">Estimated <u>{userInputs.useage_metric}</u> to-date? </label>
+
+                  <label className="col-sm-12 col-form-label">
+                    <div>
+                      Estimate current wear on this component.
+                    </div>
+                    <div>
+                      {userInputs.useage_metric.toUpperCase()} {userInputs.useage_metric === 'distance' ? `(${props.distUnits}) ` : null}
+                      to date?
+                    </div>
+
+                  </label>
+                  <div className="col-sm-4"></div>
                   <div className="col-sm-8">
-                    <input type="email" className="form-control" id="current-wear" placeholder="(to do: units)"></input>
+                    <input onChange={inputText} type="number" className="form-control"
+                      id={userInputs.useage_metric === 'distance' ? 'dist_on_add' : 'time_on_add'}
+                      value={userInputs.useage_metric === 'distance' ? userInputs.dist_on_add : userInputs.time_on_add}>
+                    </input>
+                  </div>
+
+                </div>
+
+
+
+
+                <div className="form-group row mt-5 align-items-end">
+                  <label className="col-sm-12 col-form-label" >
+                    Lifespan in terms of {userInputs.useage_metric.toUpperCase()} {userInputs.useage_metric === 'distance' ? `(${props.distUnits})` : null}:
+                  </label>
+                  <div className="col-sm-4"></div>
+                  <div className="col-sm-8">
+                    <input onChange={inputText} type="number" className="form-control"
+                      id={userInputs.useage_metric === 'distance' ? 'lifespan_dist' : 'lifespan_time'}
+                      value={userInputs.useage_metric === 'distance' ? userInputs.lifespan_dist : userInputs.lifespan_time}>
+                    </input>
                   </div>
                 </div>
 
-                <div className="form-group row mt-5 align-items-end">
-                  <label className="col-sm-4 col-form-label" >Enter lifespan in terms of <u>{userInputs.useage_metric}</u>: </label>
-                  <div className="col-sm-8">
-                    <input type="email" className="form-control" id="lifespan" placeholder="(to do: units)"></input>
+
+                {/* <div className="row my-5 justify-content-md-center">
+                  <div className="col-xs-auto strong-text">
+                    You will receive a notice to check, service or replace this part in **TO DO**
                   </div>
-                </div>
+                </div> */}
 
-                <div className="row my-5 justify-content-md-center">
-                  <div className="col-xs-auto strong-text">You will receive a notice to service (or replace) this part in **TO DO**</div>
-                </div>
-
-                <div className="row justify-content-center">
-                  <button onClick={submitForm} className="btn btn-outline-dark">Submit</button>
+                <div className="row justify-content-center mt-4">
+                  <button onClick={submitForm} className="btn btn-outline-dark full-width">Submit</button>
                 </div>
               </div>
               : null
@@ -170,9 +212,16 @@ const NewPartModal = (props) => {
 
       </form>
 
-    </Modal>
+    </Modal >
 
   )
 }
 
 export default NewPartModal
+
+const resetCustomInputs = (inputs) => {
+  inputs.dist_on_add = '';
+  inputs.time_on_add = '';
+  inputs.lifespan_dist = '';
+  inputs.lifespan_time = '';
+}
