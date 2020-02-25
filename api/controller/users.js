@@ -1,4 +1,4 @@
-const { dbQuery, insert, update, get } = require('../model/index.js');
+const { dbQuery, insert, update, get } = require('../model');
 const bcrypt = require('bcrypt');
 const axios = require('axios');
 const strava = require('../stravaAccess.js');

@@ -1,15 +1,12 @@
 const express = require('express');
 const router = express.Router();
 
-const partModel = require('../model/partModel.js');
+const parts = require('../controller/parts.js');
 const users = require('../controller/users.js')
 
-// router.get('/bikes', bikes.get);
-// router.post('/bikes', bikes.post);
-// router.delete('/:bikeId', bikes.delete);
-
-router.get('/parts', partModel.get);
-router.post('/parts', partModel.post);
+router.get('/parts', parts.get);
+router.post('/parts', parts.post);
+router.put('/parts', parts.put);
 // router.put('/parts', partModel.put);
 // router.post('/:bikeId/parts', parts.post);
 // router.delete('/parts/:partId', parts.delete);

@@ -1,4 +1,4 @@
-const {dbQuery, insert} = require ('./index.js');
+const {dbQuery, insert} = require ('../model');
 
 const partModel = {
   get: async (req, res) => {
@@ -14,6 +14,10 @@ const partModel = {
     let newPart = await insert('gear.parts', req.body);
     console.log(newPart);
     res.send(newPart);
+  },
+
+  put: async(req, res) => {
+    
   }
 
 }

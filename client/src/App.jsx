@@ -42,7 +42,7 @@ const App = (props) => {
 
   const handleSignUp = () => {
     changeModal('signup');
-  }
+  };
 
   let distUnits = userProfile && userProfile.measurement_preference === 'feet' ? 'miles' : 'km'
 
@@ -50,10 +50,12 @@ const App = (props) => {
     setProfile(profile);
     changeModal(null);
     changeView('bikeList');
-
-    // set profile.session as cookie
     if (profile.session) { document.cookie = `${cookieName}=${profile.session};max-age=${6 * 60 * 60}`; }
-  }
+  };
+
+  const handleLogout = () => {
+
+  };
 
   const handleBikeSelect = async (bike) => {
     console.log('bike', bike)
@@ -68,25 +70,22 @@ const App = (props) => {
       // query
     }
     changeView(view);
-  }
+  };
 
   return (
     <div className="mt-5 mb-5">
       <div className="container">
         <div className="row">
-          <div className="col-12">
-            
-            
-          </div>
+
           <div className="col-12 mb-4">
-            <button onClick={handleSignUp}> Sign Up</button>
+            <button onClick={handleLogout}>Log out</button>
           </div>
         </div>
       </div>
       <div className="container-fluid chain-love mb-5">
         <div className="row title-text ml-5">
           <div className="col-12">
-            Bike.Bike.Bike.
+            Bull.Run.Bike.
           </div>
         </div>
       </div>
