@@ -1,19 +1,14 @@
-const dbQuery = require('./index.js').dbQuery;
+const {dbQuery, update, insert} = require('./index.js')
 
 
 module.exports =  {
+
   post: async (req, res) => {
-    let params = {
-      name: 'create-user',
-      text: 'INSERT into gear.users (username, pw) ' +
-            'VALUES($1, $2)',
-      values: [req.body.username, req.body.pw]
-    };
-    await dbQuery(params);
+    await insert('gear.users', req.body);
     res.sendStatus(200);
   },
-// strava_id, access_token, expires_at, expires_in, refresh_token
-  stravaAuth: (info, callback) => {
+
+  stravaAuth: async (info) => {
     ({ username, strava_id, access_token, expires_at, expires_in, refresh_token, scope } = {...info});
     let params = {
       name: 'strava-auth',
@@ -21,28 +16,15 @@ module.exports =  {
             `expires_at = ${expires_at}, expires_in = ${expires_in}, refresh_token = '${refresh_token}' ` +
             `WHERE username = '${username}'`
     }
-    let result = dbQuery(params, callback);
-  },
-
-  stravaRefresh: async (refreshedData) => {
-    ({ username, access_token, expires_at, expires_in, refresh_token, scope } = {...refreshedData});
-    let params = {
-      name: 'strava-refresh',
-      text: `UPDATE gear.users SET access_token = '${access_token}', expires_at = ${expires_at}, ` +
-            `expires_in = ${expires_in}, refresh_token = '${refresh_token}' ` +
-            `WHERE username = '${username}'`
-    }
     await dbQuery(params);
   },
 
 
-  updatePref: async (prefInfo) => {
-    ({ strava_id, measurement_preference } = {...prefInfo});
-    let params = {
-      name: 'updatePref',
-      text: `UPDATE gear.users SET measurement_preference = '${measurement_preference}' WHERE strava_id = ${strava_id}`
-    }
-    await dbQuery(params);
+
+  update: async (req, res) => {
+    console.log('update', req.body.update)
+    let result = await update('gear.users', req.body.update.whereVar, req.body.update.updateVars)
+    console.log(result);
   },
 
   get: async (req, res) => {
@@ -64,7 +46,6 @@ module.exports =  {
       return userData;
     }
     
-
   }
 }
 

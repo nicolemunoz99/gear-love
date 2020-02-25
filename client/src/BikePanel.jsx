@@ -5,6 +5,7 @@ const BikePanel = (props) => {
   
   const showComponents = (e) => {
     props.handleBikeSelect(props.bike)
+    props.viewHandler('parts')
   }
 
 
@@ -15,7 +16,9 @@ const BikePanel = (props) => {
         <img onClick={showComponents} className="bike-photo pointer" src={props.bike.url}></img>
       </div>
       <div className="mt-2 mb-2">Total Miles: {props.bike.distance}</div>
-      <button onClick={showComponents} className="btn btn-secondary btn-sm mb-2">View my components</button>
+      <button onClick={showComponents} className="btn btn-secondary btn-sm mb-2">
+        View my components
+      </button>
     </div>
   );
 }

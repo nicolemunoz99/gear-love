@@ -13,15 +13,16 @@ const initFormVals = {
   tracking_method: null, useage_metric: null
 };
 
+const partList = ['Chain', 'Freehub', 'Suspension Fork', 'Cassette', '--- CUSTOM ---'];
+
 const NewPartModal = (props) => {
-  const [partList, updateNA] = useState(['Chain', 'Freehub', 'Suspension Fork', 'Cassette', '--- CUSTOM ---'])
   const [userInputs, updateInputs] = useState(initFormVals);
   const [errorList, updateErrors] = useState([]);
 
 
   const updatePartHandler = (partType) => {
-    let tempState = JSON.parse(JSON.stringify(initFormVals));
-    tempState["type"] = partType;
+    let tempState = {...initFormVals};
+    tempState.type = partType;
     updateInputs(tempState);
   }
 
@@ -58,13 +59,13 @@ const NewPartModal = (props) => {
 
   const inputText = (e) => {
     if (e.target.value.length > 15) return;
-    let tempState = JSON.parse(JSON.stringify(userInputs));
+    let tempState = {...userInputs};
     tempState[e.target.id] = e.target.value;
     updateInputs(tempState);
   }
 
   const selectRadio = (e) => {
-    let tempState = JSON.parse(JSON.stringify(userInputs));
+    let tempState = {...userInputs};
     resetCustomInputs(tempState);
     tempState[e.target.name] = e.target.value;
     updateInputs(tempState);
@@ -123,18 +124,18 @@ const NewPartModal = (props) => {
 
             <div className="custom-control custom-radio custom-control-inline">
               <input onClick={selectRadio} type="radio" name="tracking_method" readOnly={true}
-                checked={userInputs.tracking_method === 'custom' ? true : false}
-                id="custom" value="custom" className="custom-control-input" >
-              </input>
-              <label className="custom-control-label" htmlFor="custom">Custom</label>
-            </div>
-            <div className="custom-control custom-radio custom-control-inline">
-              <input onClick={selectRadio} type="radio" name="tracking_method" readOnly={true}
                 id="default-spec" value="default" className="custom-control-input"
                 checked={userInputs.tracking_method === 'default' ? true : false}
                 disabled={userInputs.type.toLowerCase().indexOf('custom') >= 0 ? true : false}>
               </input>
               <label className="custom-control-label" htmlFor="default-spec">Default</label>
+            </div>
+            <div className="custom-control custom-radio custom-control-inline">
+              <input onClick={selectRadio} type="radio" name="tracking_method" readOnly={true}
+                id="custom-spec" value="custom" className="custom-control-input"
+                checked={userInputs.tracking_method === 'custom' ? true : false}>
+              </input>
+              <label className="custom-control-label" htmlFor="custom-spec">Custom</label>
             </div>
           </div>
         </div>

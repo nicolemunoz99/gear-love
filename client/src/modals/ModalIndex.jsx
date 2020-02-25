@@ -21,7 +21,7 @@ const ModalIndex = (props) => {
         null
       }
       {props.modal === 'login' ?
-        <LoginModal setProfile={props.setProfile} changeModal={props.changeModal} />
+        <LoginModal handleLogin={props.handleLogin} changeModal={props.changeModal} />
         : 
         null
       }

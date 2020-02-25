@@ -5,7 +5,7 @@ import urls from '../../urls.js'
 
 
 const PartsList = (props) => {
-  const [parts, updateParts] = React.useState(null);
+  const [parts, updateParts] = React.useState([]);
 
   
   useEffect(

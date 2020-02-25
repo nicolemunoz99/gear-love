@@ -29,9 +29,8 @@ const SignupModal = (props) => {
       updateUsernameExists(true);
       return
     }
-    axios.get(`${urls.api}/users?check=true&username=${userInputs.username.toLowerCase()}`)
+    axios.get(`${urls.api}/users/check?username=${userInputs.username.toLowerCase()}`)
       .then(response => {
-        console.log(response.data)
         if (response.data) {
           updateUsernameExists(false);
         } else {
@@ -87,22 +86,24 @@ const SignupModal = (props) => {
 
         {usernameExists === false && registrationSuccess === false ?
           <div>
+
             <div className="form-group row mt-4 justify-content-center">
-              <div className="col-sm-12 col-md-8 col-lg-12">
+              <div className="col-sm-8 col-md-8 col-lg-12">
                 <label>Password</label>
                 <input onChange={handleInput} type="password" className="form-control" id="pw1"></input>
               </div>
             </div>
-            <div className="form-group row mb-4 justify-content-center">
-              <div className="col-sm-12 col-8 col-lg-12">
+
+            <div className="form-group row mt-4 justify-content-center">
+              <div className="col-sm-8 col-md-8 col-lg-12">
                 <label>Verify password</label>
                 <input onChange={handleInput} type="password" className="form-control" id="pw2"></input>
-                {passwordsMatch === false ?
-                  <div className="error-text">Passwords don't match</div>
-                  : null
-                }
               </div>
             </div>
+            {passwordsMatch === false ?
+                  <div className="error-text text-center">Passwords don't match</div>
+                  : null
+                }
             <div className="row justify-content-center mt-4">
               <div className="col-12">
                 <button onClick={handleFormSubmit} className="btn btn-outline-dark full-width">Register with Chainlove</button>
@@ -120,7 +121,7 @@ const SignupModal = (props) => {
               <a href={`https://www.strava.com/oauth/authorize` +
                 `?client_id=${strava.clientId}` +
                 `&response_type=code` +
-                `&redirect_uri=${urls.api}/users/signup?username=${userInputs.username}` +
+                `&redirect_uri=${urls.api}/users/stravaAuth?username=${userInputs.username}` +
                 `&approval_prompt=force&scope=activity:read_all,profile:read_all`}>
                 Authorize Chain Love to import your Strava data.
               </a>

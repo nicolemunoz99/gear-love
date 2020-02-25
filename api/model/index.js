@@ -15,10 +15,25 @@ const dbQuery = async (params) => {
   return (await pool.query(params)).rows;
 };
 
-// table: string
-// whereVar, updateVars: obj
-// only accomodates one 'where' condition
-const update = async (table, whereVar, updateVars) => { 
+
+const get = async (table, criteria) => {
+  let whereStr = [];
+  for (key in criteria) {
+    whereStr = typeof criteria[key] === 'string' ?
+    [...whereStr, `${key} = '${criteria[key]}'`] : [...whereStr, `${key} = ${criteria[key]}`];
+  }
+  whereStr = whereStr.join(' AND ');
+  
+  let params = {
+    text: `SELECT * from ${table} WHERE ${whereStr}`
+  };
+  
+  return await dbQuery(params);
+}
+
+const update = async (table, data) => { 
+  console.log(table, data);
+  let { whereVar, updateVars } = data;
   let setStr = [];
   for (item in updateVars) {
     if (typeof updateVars[item] === 'string') {
@@ -30,9 +45,13 @@ const update = async (table, whereVar, updateVars) => {
   setStr = setStr.join(', ');
   let whereKey = Object.keys(whereVar)[0];
   let whereStr = typeof whereVar[whereKey] === 'string' ?  `${whereKey} = '${whereVar[whereKey]}'` : `${whereKey} = ${whereVar[whereKey]}`;
-
-  let params = {text: `UPDATE ${table} SET ${setStr} WHERE ${whereStr}`};
+  let params = {text: `UPDATE ${table} SET ${setStr} WHERE ${whereStr} RETURNING *`};
+  console.log('params', params)
+  let updatedEntry = await dbQuery(params);
+  return updatedEntry;
 }
+
+
 
 const insert = async (table, keyValues) => {
   for (key in keyValues) {
@@ -46,17 +65,17 @@ const insert = async (table, keyValues) => {
   valuesStr = valuesStr.join(', ');
 
   params = {
-    name: 'post-a-part',
     text: `INSERT INTO ${table} ` +
           `(${Object.keys(keyValues)}) ` + 
           `VALUES(${valuesStr}) RETURNING *`,
     values: [...Object.values(keyValues)]
   };
+  console.log(params);
   let newEntry = await dbQuery(params);
   return newEntry;
-}
+};
 
 
 
 
-module.exports = {dbQuery, insert}
+module.exports = {dbQuery, insert, update, get}

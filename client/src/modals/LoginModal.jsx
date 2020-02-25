@@ -22,15 +22,13 @@ const LoginModal = (props) => {
   const handleLoginSubmit = async (e) => {
     e.preventDefault();
     let userProfile = (await axios.get(`${urls.api}/users/login`, {params: userInputs})).data;
-    console.log('up', userProfile);
+    console.log('login response', userProfile);
     if (!userProfile) {
       updateLoginIsValid(false);
       return;
     }
     updateLoginIsValid(true);
-        // props.setProfile(JSON.parse(JSON.stringify()))
-
-      
+    props.handleLogin(userProfile);
   };
 
   const switchToSignup = () => { props.changeModal('signup'); }
