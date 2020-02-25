@@ -54,6 +54,12 @@ module.exports = {
       let userAuth;
       let session;
 
+      if (!req.query.username && !req.query.session) {
+        console.log('no login or session')
+        res.sendStatus(209);
+        return;
+      }
+
       // via username/pw
       if (req.query.username) {
         userAuth = (await get('users.auth', {username: req.query.username}))[0];
@@ -86,7 +92,7 @@ module.exports = {
         }
         // check if session expired
         userAuth = (await dbQuery(params))[0];
-        console.log(userAuth);
+        // console.log(userAuth);
         
         if (!userAuth) { 
           res.sendStatus(209); // session doesn't exist
@@ -193,6 +199,16 @@ module.exports = {
       }
 
 
+    },
+
+    logout: async (req, res) => {
+      console.log('attempting to delete session:', req.query)
+      await update('users.sessions', {
+        whereVar: req.query,
+        updateVars: {session: null, expires_at: null}
+      });
+      console.log('success')
+      res.sendStatus(204);
     }
 
 }

@@ -14,7 +14,6 @@ import urls from '../../urls.js';
 const cookieName = 'bikebikebike';
 
 const App = (props) => {
-  const [sessionId, updateSessionId] = useState(null);
   const [userProfile, setProfile] = useState(null);
   const [currentBike, changeBike] = useState({});
   const [partsList, changeParts] = useState([]);
@@ -40,10 +39,6 @@ const App = (props) => {
     
   }, []);
 
-  const handleSignUp = () => {
-    changeModal('signup');
-  };
-
   let distUnits = userProfile && userProfile.measurement_preference === 'feet' ? 'miles' : 'km'
 
   const handleLogin = (profile) => {
@@ -53,8 +48,12 @@ const App = (props) => {
     if (profile.session) { document.cookie = `${cookieName}=${profile.session};max-age=${6 * 60 * 60}`; }
   };
 
-  const handleLogout = () => {
-
+  const handleLogout = async () => {
+    console.log('session: ', document.cookie.split(`${cookieName}=`)[1])
+    await axios.delete(`${urls.api}/users/logout?session=${document.cookie.split(`${cookieName}=`)[1]}`); // delete session from db
+    document.cookie = `${cookieName}= ;max-age=${6 * 60 * 60}`; // remove cookie
+    changeView('landing');
+    setProfile(null);
   };
 
   const handleBikeSelect = async (bike) => {
@@ -85,7 +84,7 @@ const App = (props) => {
       <div className="container-fluid chain-love mb-5">
         <div className="row title-text ml-5">
           <div className="col-12">
-            Bull.Run.Bike.
+            Bull.Bull.Bike.
           </div>
         </div>
       </div>
@@ -100,7 +99,7 @@ const App = (props) => {
         {view === 'bikeList' ?
           <BikesList viewHandler={viewHandler}
                       handleBikeSelect={handleBikeSelect}
-                      userProfile={userProfile}
+                      bikes={userProfile.bikes}
                       distUnits={distUnits}
           />
           : null
@@ -111,6 +110,7 @@ const App = (props) => {
                       refreshPartsList={handleBikeSelect}
                       currentBike={currentBike}
                       partsList={partsList}
+                      distUnits={distUnits}
           />
           : null
         }
@@ -121,6 +121,19 @@ const App = (props) => {
                     changeModal={changeModal}
         />
       </div>
+      
+      { userProfile ?
+      <div className="container mt-4">
+        <div className="row justify-content-center">
+          <div className="col-8 text-center">
+            <button className="btn btn-outline-dark full-width" onClick={handleLogout}>Log Out</button>
+        </div>
+        </div>
+      </div>
+      :
+      null
+      }
+
     </div>
 
   );

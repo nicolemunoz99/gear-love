@@ -42,7 +42,7 @@ const PartsList = (props) => {
   
   return (
     <div className="container">
-      <div className="h2">Parts for {props.currentBike.name}</div>
+      <div className="h2">Parts for "{props.currentBike.name}"</div>
       <button onClick={newPartHandler} className="btn btn-outline-dark">New Component +</button>
       <div className="row justify-content-center">
       
@@ -51,7 +51,7 @@ const PartsList = (props) => {
           return <Part key={part.part_id} handleDeletePart={handleDeletePart} handleResetMiles={handleResetMiles} currentBike={props.currentBike} part={part}/>
         }) :
         <div className="col-12 mt-3 mb-3">
-          Couldn't find any components for {props.currentBike.name} . . .
+          Couldn't find any components for "{props.currentBike.name}"
         </div>
       }
     

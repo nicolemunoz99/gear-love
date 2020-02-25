@@ -14,7 +14,8 @@ router.put('/parts', parts.put);
 
 router.get('/users/check', users.checkUsername); // returns number of occurences of a u/n in db
 router.post('/users', users.post); // posts new username and pw
-router.get('/users/stravaAuth', users.stravaAuth); // strava auth page redirects to this endpoint
+router.delete('/users/logout', users.logout)
+router.get('/users/stravaAuth', users.stravaAuth); // strava auth page redirects here
 router.get('/users/login', users.login);
 
 

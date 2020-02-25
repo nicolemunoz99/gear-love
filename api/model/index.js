@@ -15,12 +15,13 @@ const dbQuery = async (params) => {
   return (await pool.query(params)).rows;
 };
 
-
-const get = async (table, criteria) => {
+// table: string
+// conditions: object of key/values to match
+const get = async (table, conditions) => {
   let whereStr = [];
-  for (key in criteria) {
-    whereStr = typeof criteria[key] === 'string' ?
-    [...whereStr, `${key} = '${criteria[key]}'`] : [...whereStr, `${key} = ${criteria[key]}`];
+  for (key in conditions) {
+    whereStr = typeof conditions[key] === 'string' ?
+    [...whereStr, `${key} = '${conditions[key]}'`] : [...whereStr, `${key} = ${conditions[key]}`];
   }
   whereStr = whereStr.join(' AND ');
   
@@ -31,6 +32,10 @@ const get = async (table, criteria) => {
   return await dbQuery(params);
 }
 
+// table: string
+// data: object with keys 'whereVar', 'updatVars'
+  // whereVar: object of condition to match (single condition)
+  // updateVars: key/values to update
 const update = async (table, data) => { 
   console.log(table, data);
   let { whereVar, updateVars } = data;
@@ -52,7 +57,8 @@ const update = async (table, data) => {
 }
 
 
-
+// table: string
+// keyValues: object of key/values to insert
 const insert = async (table, keyValues) => {
   for (key in keyValues) {
     if (keyValues[key] === null || keyValues[key] === undefined || keyValues[key].length === 0)  {
@@ -73,6 +79,28 @@ const insert = async (table, keyValues) => {
   console.log(params);
   let newEntry = await dbQuery(params);
   return newEntry;
+};
+
+
+// table: string
+// cols: array of columns (as strings) to delete
+// conditions: object of key/values to match
+const deleteCols = async (table, conditions) => {
+  let whereStr = [];
+  let colsStr = [];
+  for (key in conditions) {
+    if (typeof conditions[key] === 'string') {
+      whereStr.push(`${key} = '${conditions[key]}'`);
+    } else {
+      whereStr.push(`${key} = ${conditions[key]}`);
+    }
+    
+  }
+
+  whereStr = whereStr.join(` AND `)
+  let params = {text: `DELETE from ${table} ${colsStr} WHERE ${whereStr}`}
+  console.log('params', params)
+  return await dbQuery(params);
 };
 
 
