@@ -39,9 +39,6 @@
   font-size: 0.8rem;
 }
 
-.photo-container {
-  width: 100%;
-}
 
 .bike-photo {
   width: inherit;
@@ -119,7 +116,13 @@ button:hover {
   width: 100%;
 }
 
-/* .red {
-  color: red;
-  font-size: 0.8rem;
-} */
+.no-bg {
+  background-color: none;
+}
+
+
+
+
+
+
+

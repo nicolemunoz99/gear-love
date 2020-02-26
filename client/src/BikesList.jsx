@@ -8,7 +8,7 @@ const BikesList = (props) => {
   return (
     <div className="container-sm">
       <div className="h2">Your Bikes</div>
-      <div className="row justify-content-center mb-3">
+      <div className="row no-gutters justify-content-center mb-3">
       {
         props.bikes.map( bike => {
             return <BikePanel viewHandler={props.viewHandler} 

@@ -1,0 +1,44 @@
+$card-polygon-height: 25%;
+
+.bike-card {
+  height: 60vh;
+  max-height: 300px;
+}
+
+.card-head-wrapper {
+  position: relative;
+  height: 100%
+}
+.card-polygon {
+  clip-path: polygon(0% 0%, 100% 0%, 100% 100%, 0% 40%);
+  background-color: rgb(2, 2, 126);
+  height: $card-polygon-height;
+}
+
+.gear-photo-wrapper {
+  top: 12.5%;
+  right: 5%;
+  width: 12vh;
+  height: 12vh;
+  position: absolute;
+  border-style: solid;
+  border-width: 2px;
+  background-color: rgb(233, 233, 233);
+  overflow: hidden;
+  border-radius: 500px;
+}
+
+.gear-photo-wrapper > img {
+  position: relative;
+  top: 50%;
+  left: 50%;
+  transform: translateY(-50%) translateX(-50%);
+  object-fit: contain;
+  width: 80%;
+}
+
+.gear-details {
+  position: relative;
+  padding: 2rem 1rem 0 1rem;
+  height: 100 - $card-polygon-height;
+}

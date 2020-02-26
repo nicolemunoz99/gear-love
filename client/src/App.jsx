@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 
-
 // import profileData from './sampleData/userProfile.js'; // eventually delete
 
+import Nav from './Nav.jsx';
 import BikesList from './BikesList.jsx';
 import PartsList from './PartsList.jsx';
 import ModalIndex from './modals/ModalIndex.jsx';
@@ -39,7 +39,8 @@ const App = (props) => {
     
   }, []);
 
-  let distUnits = userProfile && userProfile.measurement_preference === 'feet' ? 'miles' : 'km'
+  let distUnits = userProfile && userProfile.measurement_preference === 'feet' ? 'miles' : 'km';
+  let lastActivity = userProfile ? {id: userProfile.last_ride_id, name: userProfile.last_ride_name} : null;
 
   const handleLogin = (profile) => {
     setProfile(profile);
@@ -73,14 +74,13 @@ const App = (props) => {
 
   return (
     <div className="mt-5 mb-5">
+      { userProfile ?
       <div className="container">
-        <div className="row">
-
-          <div className="col-12 mb-4">
-            <button onClick={handleLogout}>Log out</button>
-          </div>
-        </div>
+        <Nav lastActivity={lastActivity} />
       </div>
+      :
+      null
+      }
       <div className="container-fluid chain-love mb-5">
         <div className="row title-text ml-5">
           <div className="col-12">
@@ -88,6 +88,7 @@ const App = (props) => {
           </div>
         </div>
       </div>
+
       <div className="container">
 
         {view === 'landing' ?
