@@ -1,8 +1,12 @@
 $card-polygon-height: 25%;
 
 .bike-card {
-  height: 60vh;
-  max-height: 300px;
+  // height: 60vh;
+}
+
+.bike-card-filler {
+  height: 5vh;
+  max-height: auto;
 }
 
 .card-head-wrapper {
@@ -12,20 +16,24 @@ $card-polygon-height: 25%;
 .card-polygon {
   clip-path: polygon(0% 0%, 100% 0%, 100% 100%, 0% 40%);
   background-color: rgb(2, 2, 126);
-  height: $card-polygon-height;
+  height: 5rem //$card-polygon-height;
 }
 
 .gear-photo-wrapper {
-  top: 12.5%;
-  right: 5%;
+
+  // clip-path: circle(50% at 50% 50%);
+  top: 30px;
+  right: 30px;
   width: 12vh;
   height: 12vh;
   position: absolute;
   border-style: solid;
   border-width: 2px;
+  
   background-color: rgb(233, 233, 233);
   overflow: hidden;
   border-radius: 500px;
+  
 }
 
 .gear-photo-wrapper > img {

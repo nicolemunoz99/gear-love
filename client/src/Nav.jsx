@@ -2,10 +2,17 @@ import React from 'react';
 
 const Nav = (props) => {
 
+  const refreshLastActivity = (e) => {
+
+  };
+
   return (
     <div className="row mb-4">
       <div className="col">
-        {/* Last loaded activity: {props.lastActivity.name} <button className="ml-3 btn btn-outline-dark btn-sm">refresh</button> */}
+        <i onClick={refreshLastActivity} className="material-icons pointer">
+            refresh
+        </i>
+          Last loaded activity: {props.lastActivity.name} 
       </div>
     </div>
   )

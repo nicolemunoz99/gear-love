@@ -44,8 +44,8 @@ const App = (props) => {
 
   const handleLogin = (profile) => {
     setProfile(profile);
-    changeModal(null);
     changeView('bikeList');
+    changeModal(null);
     if (profile.session) { document.cookie = `${cookieName}=${profile.session};max-age=${6 * 60 * 60}`; }
   };
 
@@ -66,9 +66,6 @@ const App = (props) => {
   };
 
   const viewHandler = (view) => {
-    if (view === 'parts') {
-      // query
-    }
     changeView(view);
   };
 
@@ -84,7 +81,7 @@ const App = (props) => {
       <div className="container-fluid chain-love mb-5">
         <div className="row title-text ml-5">
           <div className="col-12">
-            Bull.Bull.Bike.
+            Bike.Bike.Bike.
           </div>
         </div>
       </div>

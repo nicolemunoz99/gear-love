@@ -1,6 +1,6 @@
-.bike-card {
-  height: 60vh;
-  max-height: 300px;
+.bike-card-filler {
+  height: 5vh;
+  max-height: auto;
 }
 
 .card-head-wrapper {
@@ -11,12 +11,12 @@
 .card-polygon {
   clip-path: polygon(0% 0%, 100% 0%, 100% 100%, 0% 40%);
   background-color: #02027e;
-  height: 25%;
+  height: 5rem;
 }
 
 .gear-photo-wrapper {
-  top: 12.5%;
-  right: 5%;
+  top: 30px;
+  right: 30px;
   width: 12vh;
   height: 12vh;
   position: absolute;

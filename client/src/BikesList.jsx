@@ -6,7 +6,7 @@ const BikesList = (props) => {
   
 
   return (
-    <div className="container-sm">
+    <div className="container-md">
       <div className="h2">Your Bikes</div>
       <div className="row no-gutters justify-content-center mb-3">
       {
