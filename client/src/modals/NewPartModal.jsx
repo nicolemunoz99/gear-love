@@ -35,7 +35,7 @@ const NewPartModal = (props) => {
     if (!userInputs.type) tempErrorList.push('part type');
 
     if (userInputs.tracking_method === 'custom') {
-      if (!userInputs.useage_metric) tempErrorList.push('useage metric');
+      if (!userInputs.useage_metric) tempErrorList.push('usage metric');
       if ((!userInputs.dist_on_add && !userInputs.time_on_add) || 
             Number(userInputs.dist_on_add) < 0 || Number(userInputs.time_on_add) < 0) {
         tempErrorList.push('current wear')
@@ -165,7 +165,7 @@ const NewPartModal = (props) => {
         {userInputs.tracking_method === 'custom' ?
           <div>
             <div className="form-group row mt-5 align-items-end">
-              <label className="col-sm-4 col-form-label">Useage metric: </label>
+              <label className="col-sm-4 col-form-label">Usage metric: </label>
               <div className="col-sm-8">
 
                 <div className="custom-control custom-radio custom-control-inline">

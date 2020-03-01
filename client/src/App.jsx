@@ -3,7 +3,7 @@ import axios from 'axios';
 
 // import profileData from './sampleData/userProfile.js'; // eventually delete
 
-import Nav from './Nav.jsx';
+import Nav from './nav/NavIndex.jsx';
 import BikesList from './BikesList.jsx';
 import PartsList from './PartsList.jsx';
 import ModalIndex from './modals/ModalIndex.jsx';
@@ -28,7 +28,6 @@ const App = (props) => {
     }
     // has cookie
     let session = document.cookie.split(`${cookieName}=`)[1];
-    console.log('session', session);
     (async () => {
       let profileResponse = await axios.get(`${urls.api}/users/login?session=${session}`);
       if (profileResponse.status === 209) { changeView('landing'); return }
@@ -40,7 +39,6 @@ const App = (props) => {
   }, []);
 
   let distUnits = userProfile && userProfile.measurement_preference === 'feet' ? 'miles' : 'km';
-  let lastActivity = userProfile ? {id: userProfile.last_ride_id, name: userProfile.last_ride_name} : null;
 
   const handleLogin = (profile) => {
     setProfile(profile);
@@ -50,7 +48,6 @@ const App = (props) => {
   };
 
   const handleLogout = async () => {
-    console.log('session: ', document.cookie.split(`${cookieName}=`)[1])
     await axios.delete(`${urls.api}/users/logout?session=${document.cookie.split(`${cookieName}=`)[1]}`); // delete session from db
     document.cookie = `${cookieName}= ;max-age=${6 * 60 * 60}`; // remove cookie
     changeView('landing');
@@ -58,35 +55,29 @@ const App = (props) => {
   };
 
   const handleBikeSelect = async (bike) => {
-    console.log('bike', bike)
     let parts = (await axios.get(`${urls.api}/parts?bike_id=${bike.bike_id}`)).data;
-    console.log('parts', parts)
-    changeParts(parts);
-    changeBike(bike);
+    await changeParts(parts);
+    await changeBike(bike);
   };
 
-  const viewHandler = (view) => {
-    changeView(view);
+  const refreshLastActivity = (e) => {
+
   };
 
   return (
-    <div className="mt-5 mb-5">
-      { userProfile ?
-      <div className="container">
-        <Nav lastActivity={lastActivity} />
-      </div>
-      :
-      null
-      }
-      <div className="container-fluid chain-love mb-5">
-        <div className="row title-text ml-5">
-          <div className="col-12">
-            Bike.Bike.Bike.
-          </div>
-        </div>
-      </div>
+    <div>
+      
+      
+      <Nav changeView={changeView}
+           userProfile={userProfile}
+           changeModal={changeModal}
+           refreshLastActivity={refreshLastActivity}
+           handleLogout={handleLogout}
+           handleBikeSelect={handleBikeSelect}
+      />
+      
 
-      <div className="container">
+      <div className="container mt-5 mb-5">
 
         {view === 'landing' ?
           <Landing changeModal={changeModal} />
@@ -95,7 +86,7 @@ const App = (props) => {
         }
 
         {view === 'bikeList' ?
-          <BikesList viewHandler={viewHandler}
+          <BikesList changeView={changeView}
                       handleBikeSelect={handleBikeSelect}
                       bikes={userProfile.bikes}
                       distUnits={distUnits}
@@ -103,7 +94,7 @@ const App = (props) => {
           : null
         }
         {view === 'parts' ?
-          <PartsList viewHandler={viewHandler}
+          <PartsList changeView={changeView}
                       changeModal={changeModal}
                       refreshPartsList={handleBikeSelect}
                       currentBike={currentBike}
@@ -119,18 +110,6 @@ const App = (props) => {
                     changeModal={changeModal}
         />
       </div>
-      
-      { userProfile ?
-      <div className="container mt-4">
-        <div className="row justify-content-center">
-          <div className="col-8 text-center">
-            <button className="btn btn-outline-dark full-width" onClick={handleLogout}>Log Out</button>
-        </div>
-        </div>
-      </div>
-      :
-      null
-      }
 
     </div>
 

@@ -35,7 +35,7 @@ const PartsList = (props) => {
   };
 
   const returnToBikeList = () => {
-    props.viewHandler('bikeList')
+    props.changeView('bikeList')
   };
 
 

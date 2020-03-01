@@ -1,10 +1,12 @@
-$card-polygon-height: 25%;
+@import './include-media';
 
-.bike-card {
-  // height: 60vh;
-}
 
-.bike-card-filler {
+//////////////
+// BIKE PANEL
+//////////////
+$bike-panel-polygon-height: 25%;
+
+.bike-card-filler { // fix in jsx
   height: 5vh;
   max-height: auto;
 }
@@ -21,7 +23,6 @@ $card-polygon-height: 25%;
 
 .gear-photo-wrapper {
 
-  // clip-path: circle(50% at 50% 50%);
   top: 30px;
   right: 30px;
   width: 12vh;
@@ -48,5 +49,19 @@ $card-polygon-height: 25%;
 .gear-details {
   position: relative;
   padding: 2rem 1rem 0 1rem;
-  height: 100 - $card-polygon-height;
+  height: 100 - $bike-panel-polygon-height;
 }
+
+//////////////
+// NAV
+//////////////
+$breakpoints: (nav-collapse: 768px);
+
+nav {
+  margin: 2em 0 0 0  
+}
+
+nav a {
+  cursor: pointer;
+}
+

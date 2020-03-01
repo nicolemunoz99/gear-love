@@ -1,5 +1,6 @@
 @import "./sass-compiled/compiled.css";
 
+
 .pointer {
   cursor: pointer
 }
@@ -118,7 +119,9 @@ button:hover {
 
 
 
-
+.my-brand {
+  font-size: 2em;
+}
 
 
 

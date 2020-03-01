@@ -5,8 +5,8 @@ const BikePanel = (props) => {
   const [showDetails, updateShowDetails] = useState(false)
 
   const showComponents = (e) => {
-    props.handleBikeSelect(props.bike)
-    props.viewHandler('parts')
+    props.handleBikeSelect(props.bike);
+    props.changeView('parts');
   };
 
   const toggleDetails = (e) => {
