@@ -13,7 +13,7 @@ const NavItem = (props) => {
   };
 
   return (
-    <li class={`nav-item ${dd ? "dropdown" : null}`}>
+    <li className={`nav-item ${dd ? "dropdown" : null}`}>
       <a onClick={handleNavClick}
           className={`nav-link active ${dd ? "dropdown-toggle" : null}`} 
           id={props.handler.arg}
@@ -22,11 +22,11 @@ const NavItem = (props) => {
         {props.title}
       </a>
       {props.dropdown ?
-      <div class="dropdown-menu" aria-labelledby={'parts'}>
+      <div className="dropdown-menu" aria-labelledby={'parts'}>
         {props.dropdown.map(ddItem => {
             
             return (
-              <a id={ddItem} onClick={ddItem.fn} class="dropdown-item">{ddItem.title}</a>
+              <a id={ddItem} onClick={ddItem.fn} className="dropdown-item">{ddItem.title}</a>
             )
           })}
       </div>
