@@ -1,4 +1,5 @@
 @import './include-media';
+$darkBlue: rgb(2, 2, 126);
 
 
 //////////////
@@ -17,7 +18,7 @@ $bike-panel-polygon-height: 25%;
 }
 .card-polygon {
   clip-path: polygon(0% 0%, 100% 0%, 100% 100%, 0% 40%);
-  background-color: rgb(2, 2, 126);
+  background-color: $darkBlue;
   height: 5rem //$card-polygon-height;
 }
 
@@ -52,16 +53,5 @@ $bike-panel-polygon-height: 25%;
   height: 100 - $bike-panel-polygon-height;
 }
 
-//////////////
-// NAV
-//////////////
-$breakpoints: (nav-collapse: 768px);
 
-nav {
-  margin: 2em 0 0 0  
-}
-
-nav a {
-  cursor: pointer;
-}
 

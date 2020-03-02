@@ -1,4 +1,7 @@
 @import "./sass-compiled/compiled.css";
+:root {
+  --darkBlue: rgb(2, 2, 126);
+}
 
 
 .pointer {
@@ -9,6 +12,10 @@
   width: 100%
 }
 
+.app-wrapper {
+  margin-top: 5em;
+}
+
 .chainlove-modal-backdrop {
   position: fixed;
   top: 0;
@@ -17,7 +24,7 @@
   height: 100%;
   background-color: rgb(43, 38, 38, 0.5);
   align-items: center;
-  z-index: 1000;
+  z-index: 1500;
 }
 
 .chainlove-modal {
@@ -91,7 +98,6 @@ button:hover {
 .strong-text {
   font-size: 1.5em;
   font-weight: bold;
-  /* text-align: center; */
 }
 
 .cursor-pointer {
@@ -117,11 +123,43 @@ button:hover {
   background-color: none;
 }
 
-
-
 .my-brand {
   font-size: 2em;
 }
 
+.part-title {
+  font-size: 2rem;
+}
 
+nav a {
+  cursor: pointer;
+}
 
+.my-dropdown {
+  position: relative;
+  z-index: 900;
+  text-align: right;
+}
+
+.my-dropdown-contents {
+  position: absolute;
+  right: 0;
+  border-style: solid;
+  border-width: 1px;
+  border-radius: 0.3rem;
+  border-color: rgb(218, 218, 218);
+  cursor: pointer;
+}
+
+.my-dropdown-contents > * {
+  padding: 0 0.7rem 0 0.7rem;
+}
+
+.my-dropdown-contents > *:hover {
+  background-color: var(--darkBlue);
+  color: white;
+}
+
+.main-nav {
+  background-color: rgb(255, 255, 255, 0.8);
+}

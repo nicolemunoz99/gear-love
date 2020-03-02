@@ -5,7 +5,7 @@ import axios from 'axios';
 
 import Nav from './nav/NavIndex.jsx';
 import BikesList from './BikesList.jsx';
-import PartsList from './PartsList.jsx';
+import PartsList from './parts/PartsList.jsx';
 import ModalIndex from './modals/ModalIndex.jsx';
 import Landing from './Landing.jsx';
 
@@ -19,7 +19,7 @@ const App = (props) => {
   const [partsList, changeParts] = useState([]);
   
   const [modal, changeModal] = useState(null); // null, signup, login, newPart, postSuccess
-  const [view, changeView] = useState('landing'); // bikeList, parts, newPartForm, landing
+  const [view, changeView] = useState(null); // bikeList, parts, newPartForm, landing
 
   useEffect(() => {
     // no cookie
@@ -31,8 +31,8 @@ const App = (props) => {
     (async () => {
       let profileResponse = await axios.get(`${urls.api}/users/login?session=${session}`);
       if (profileResponse.status === 209) { changeView('landing'); return }
-      if (profileResponse.status === 227) {changeView ('landing'); return } // TO DO modal to prompt user to grant appropriate scope
-      console.log('resp', profileResponse)
+      if (profileResponse.status === 227) {changeView ('landing'); return } 
+      // TO DO modal to prompt user to grant appropriate scope
       handleLogin(profileResponse.data);
     })();
     
@@ -77,7 +77,7 @@ const App = (props) => {
       />
       
 
-      <div className="container mt-5 mb-5">
+      <div className="app-wrapper">
 
         {view === 'landing' ?
           <Landing changeModal={changeModal} />
@@ -103,14 +103,14 @@ const App = (props) => {
           />
           : null
         }
-        <ModalIndex distUnits={distUnits} 
+        
+      </div>
+      <ModalIndex distUnits={distUnits} 
                     bikeId={currentBike.bike_id}
                     handleLogin={handleLogin} 
                     modal={modal} 
                     changeModal={changeModal}
         />
-      </div>
-
     </div>
 
   );

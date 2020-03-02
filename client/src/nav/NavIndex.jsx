@@ -16,7 +16,7 @@ const Nav = (props) => {
   return (
       <div>
       {!props.userProfile ?
-      <nav className="navbar navbar-expand-sm navbar-light bg-light">
+      <nav className="navbar navbar-expand-sm main-nav fixed-top">
         <a className=" navbar-brand my-brand">{appName}</a>
         <button className="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
           <span className="navbar-toggler-icon"></span>
@@ -37,7 +37,7 @@ const Nav = (props) => {
         </div>
       </nav>
       :
-      <nav className="navbar navbar-expand-sm navbar-light bg-light">
+      <nav className="navbar navbar-expand-sm main-nav fixed-top">
         <a className=" navbar-brand my-brand">{appName}</a>
         <button className="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
           <span className="navbar-toggler-icon"></span>
