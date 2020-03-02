@@ -15,7 +15,7 @@ const PartNav = (props) => {
     document.removeEventListener('click', clickAnywhere)
   }
   
-  const navToggle = (e) => {
+  const navToggle = () => {
     updateShowNav(!showNav)
   };
 

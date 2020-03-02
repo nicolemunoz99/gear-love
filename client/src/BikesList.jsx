@@ -13,7 +13,7 @@ const BikesList = (props) => {
         props.bikes.map( bike => {
             return <BikePanel changeView={props.changeView} 
                               handleBikeSelect={props.handleBikeSelect} 
-                              key={bike.id}
+                              key={bike.bike_id}
                               bike={bike}
                               distUnits={props.distUnits}/>
         })

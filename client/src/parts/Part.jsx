@@ -4,6 +4,7 @@ import PartNav from './PartNav.jsx';
 // TO DO: when retiring component, prompt user to add a replacement
 
 const Part = (props) => {
+  console.log('part: ', props.part)
   
   const retire = (e) => {
     props.handleDeletePart(props.part.part_id)
@@ -17,7 +18,7 @@ const Part = (props) => {
 
 
   return (
-    <div className="col-xs-12 col-md-6">
+    <div className="col-xs-12 col-md-6 col-xl-4">
       {useageUntilEnd < 100 ? <div className="alert mb-1">I need to be replaced soon!</div> : null}
       <div className="part-panel border border-dark rounded my-3 p-2">
         <PartNav 

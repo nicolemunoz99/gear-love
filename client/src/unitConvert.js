@@ -7,7 +7,6 @@ const distConvert = (distance_units, distInMeters) => {
 
 // time in secs to hours
 const timeConvert = (timeInSecs) => {
-  console.log('time', timeInSecs)
   return (timeInSecs / 60 / 60).toFixed(1);
 };
 

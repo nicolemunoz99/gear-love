@@ -23,10 +23,10 @@ const NavItem = (props) => {
       </a>
       {props.dropdown ?
       <div className="dropdown-menu" aria-labelledby={'parts'}>
-        {props.dropdown.map(ddItem => {
+        {props.dropdown.map((ddItem, i) => {
             
             return (
-              <a id={ddItem} onClick={ddItem.fn} className="dropdown-item">{ddItem.title}</a>
+              <a key={i} id={ddItem} onClick={ddItem.fn} className="dropdown-item">{ddItem.title}</a>
             )
           })}
       </div>

@@ -18,7 +18,7 @@ const BikePanel = (props) => {
 
   return (
 
-    <div className="col-md-6  p-2">
+    <div className="col-md-6 col-xl-4 p-2">
       <div className="bike-card full-width border border-dark rounded shadow">
 
         <div onClick={showComponents} className="card-polygon pointer">
