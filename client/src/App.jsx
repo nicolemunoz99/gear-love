@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 
+
 // import profileData from './sampleData/userProfile.js'; // eventually delete
 
 import Nav from './nav/NavIndex.jsx';
@@ -22,6 +23,7 @@ const App = (props) => {
   const [view, changeView] = useState(null); // bikeList, parts, newPartForm, landing
 
   useEffect(() => {
+
     // no cookie
     if (document.cookie.indexOf(cookieName) < 0) {
       changeView('landing')
@@ -105,11 +107,13 @@ const App = (props) => {
         }
         
       </div>
-      <ModalIndex distUnits={distUnits} 
-                    bikeId={currentBike.bike_id}
-                    handleLogin={handleLogin} 
-                    modal={modal} 
-                    changeModal={changeModal}
+      <ModalIndex 
+        distUnits={distUnits} 
+        currentBike={currentBike}
+        handleLogin={handleLogin} 
+        modal={modal} 
+        changeModal={changeModal}
+        changeParts={changeParts}
         />
     </div>
 

@@ -7,7 +7,7 @@ const PartTypeDropdownItem = (props) => {
   }
 
   return (
-    <a onClick={clickPartType} id={props.part.toLowerCase().indexOf('custom') >= 0 ? 'custom' : props.part} className="dropdown-item" >{props.part}</a>
+    <a onClick={clickPartType} id={props.part.toLowerCase().indexOf('custom') >= 0 ? 'custom' : props.part} className="dropdown-item pointer" >{props.part}</a>
   )
 }
 
