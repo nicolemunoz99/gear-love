@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import { distConvert, timeConvert } from './unitConvert.js';
 
 const BikePanel = (props) => {
   const [showDetails, updateShowDetails] = useState(false)
@@ -35,11 +34,11 @@ const BikePanel = (props) => {
             <div onClick={showComponents} className="h4 pointer">{props.bike.name}</div>
 
             <div className={itemClass}>
-              {`Total ${props.distUnits}:  ${distConvert(props.distUnits, props.bike.dist_current)}`}
+              {`Total ${props.measurementPref}:  ${props.bike.dist_current}`}
             </div>
 
             <div className={itemClass}>
-              {`Total hours:  ${timeConvert(props.bike.time_current)}`}
+              {`Total hours:  ${props.bike.time_current}`}
             </div>
 
             {showDetails ?

@@ -13,7 +13,7 @@ const ModalIndex = (props) => {
       {props.modal === 'newPart' ?
         <NewPartModal 
           currentBike={props.currentBike} 
-          distUnits={props.distUnits} 
+          measurementPref={props.measurementPref} 
           changeModal={props.changeModal}
           changeParts={props.changeParts}/>
         : 

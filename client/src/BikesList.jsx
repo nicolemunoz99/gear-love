@@ -15,7 +15,7 @@ const BikesList = (props) => {
                               handleBikeSelect={props.handleBikeSelect} 
                               key={bike.bike_id}
                               bike={bike}
-                              distUnits={props.distUnits}/>
+                              measurementPref={props.measurementPref}/>
         })
       }
       </div>

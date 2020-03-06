@@ -16,7 +16,7 @@ const dbQuery = async (params) => {
 };
 
 // table: string
-// conditions: object of key/values to match
+// conditions: object of key/values to match (multiple conditions )
 const get = async (table, conditions) => {
   let whereStr = [];
   for (key in conditions) {

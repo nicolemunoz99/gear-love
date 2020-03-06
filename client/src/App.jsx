@@ -40,9 +40,9 @@ const App = (props) => {
     
   }, []);
 
-  let distUnits = userProfile && userProfile.measurement_preference === 'feet' ? 'miles' : 'km';
 
   const handleLogin = (profile) => {
+    console.log('profile \n', profile)
     setProfile(profile);
     changeView('bikeList');
     changeModal(null);
@@ -91,7 +91,7 @@ const App = (props) => {
           <BikesList changeView={changeView}
                       handleBikeSelect={handleBikeSelect}
                       bikes={userProfile.bikes}
-                      distUnits={distUnits}
+                      measurementPref={userProfile.measurement_preference}
           />
           : null
         }
@@ -101,14 +101,13 @@ const App = (props) => {
                       refreshPartsList={handleBikeSelect}
                       currentBike={currentBike}
                       partsList={partsList}
-                      distUnits={distUnits}
           />
           : null
         }
         
       </div>
       <ModalIndex 
-        distUnits={distUnits} 
+        measurementPref={userProfile ? userProfile.measurement_preference : null} 
         currentBike={currentBike}
         handleLogin={handleLogin} 
         modal={modal} 

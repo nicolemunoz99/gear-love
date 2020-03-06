@@ -1,4 +1,4 @@
-DROP DATABASE chainlove;
+-- DROP DATABASE chainlove;
 CREATE DATABASE chainlove;
 
 \c chainlove;
@@ -26,7 +26,7 @@ CREATE TABLE IF NOT EXISTS users.sessions(
 CREATE TABLE IF NOT EXISTS users.info(
   user_id INT REFERENCES users.auth (user_id),
   strava_id INT PRIMARY KEY,
-  join_date DATE DEFAULT CURRENT_DATE,
+  join_date BIGINT,
   measurement_preference VARCHAR,
   last_ride_id INT,
   last_ride_name VARCHAR
@@ -49,21 +49,26 @@ CREATE TABLE IF NOT EXISTS gear.bikes(
   time_on_add DECIMAL,
   time_current DECIMAL,
   image VARCHAR,
-  date_added DATE DEFAULT CURRENT_DATE
+  date_added BIGINT
 );
 
 -- parts 
 CREATE TABLE IF NOT EXISTS gear.parts(
   part_id SERIAL primary key NOT NULL,
   bike_id VARCHAR references gear.bikes (bike_id),
+  date_added BIGINT,
   type VARCHAR,
   custom_type VARCHAR,
   brand VARCHAR,
   model VARCHAR,
-  dist_on_add DECIMAL,
-  time_on_add DECIMAL,
+  dist_at_add DECIMAL,
+  time_at_add DECIMAL,
   lifespan_dist DECIMAL,
   lifespan_time DECIMAL,
   tracking_method VARCHAR,
-  useage_metric VARCHAR
+  useage_metric VARCHAR,
+  current_wear_method VARCHAR,
+  current_wear_dist DECIMAL,
+  current_wear_time DECIMAL,
+  new_date BIGINT
 );

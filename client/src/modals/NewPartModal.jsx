@@ -9,7 +9,6 @@ import urls from '../../../urls.js';
 
 const initFormVals = {
   type: '', custom_type: '', brand: '', model: '',
-  dist_on_add: '', time_on_add: '',
   lifespan_dist: '', lifespan_time: '',
   tracking_method: null, useage_metric: null,
   current_wear_method: '', current_wear_dist: '', current_wear_time: '', new_date: ''
@@ -44,62 +43,24 @@ const NewPartModal = (props) => {
   const submitForm = async (e) => {
     e.preventDefault();
     
-    let tempErrorList = [];
-
     // validate form
-    if (!userInputs.tracking_method) tempErrorList.push('tracking method');
-    if (!userInputs.type) tempErrorList.push('part type');
-
-    if (userInputs.tracking_method === 'custom') {
-      if (!userInputs.useage_metric) tempErrorList.push('usage metric');
-      
-      if ( userInputs.current_wear_method === "estimate" ) {
-        if ( 
-          (userInputs.current_wear_dist.length === 0 && userInputs.current_wear_time.length === 0) ||
-          Number(userInputs.current_wear_dist) < 0 || Number(userInputs.current_wear_time) < 0
-        )
-         { tempErrorList.push('current wear'); }
-      };
-
-      if (userInputs.current_wear_method === 'strava') {
-        let native_new_date = xDate(userInputs.new_date);
-        // date must be before today's date
-        // date must be after 1900
-        if (!userInputs.new_date || (native_new_date - Date.now()) > 0 || (native_new_date - xDate(1970)) < 0 ) {
-          tempErrorList.push('current wear')
-        }
-        
-      }
-
-      if ( !(Number(userInputs.lifespan_dist) > 0) && !(Number(userInputs.lifespan_time) > 0)) {
-        tempErrorList.push('life/service interval')
-      };
-    }
-
-    if (tempErrorList.length > 0) {
-      updateErrors(tempErrorList);
+    let errors = invalidFields(userInputs);
+    if (errors.length > 0) {
+      updateErrors(errors);
       return;
     }
 
+    // TO DO: convert any distances from user's measurement preference to meters (strava's measurement unit)
 
-    let newPart = { ...userInputs };
-    newPart.dist_on_add = props.currentBike.dist_current;
-    newPart.time_on_add = props.currentBike.time_on_add;
-
-
-    if (newPart.tracking_method === 'default' || newPart.current_wear_method === 'new') {
-      newPart.current_wear_dist = 0;
-      newPart.current_wear_time = 0;
-    }
-
-    console.log('newPart', newPart)
+    console.log('userInputs', userInputs)
     console.log('submit')
 
-    // let newPartList = (await axios.post(`${urls.api}/parts?bike_id=${props.currentBike.bike_id}`, newPart)).data;
-    // if (newPartList.length > 0) {
-    //   props.changeModal('postSuccess');
-    //   props.changeParts(newPartList);
-    // }
+    // post and get updated part list
+    let newPartList = (await axios.post(`${urls.api}/parts?bike_id=${props.currentBike.bike_id}`, userInputs)).data;
+    if (newPartList.length > 0) {
+      props.changeModal('postSuccess');
+      props.changeParts(newPartList);
+    }
   }
 
   const inputText = (e) => {
@@ -269,6 +230,7 @@ const NewPartModal = (props) => {
                           id={userInputs.useage_metric === 'distance' ? 'current_wear_dist' : 'current_wear_time'} 
                           placeholder={`Estimate current wear in ${userInputs.useage_metric === 'distance' ? props.distUnits : 'hours'}`}>
                         </input>
+                        Your best guess for the current wear of this component in terms of the metric you selected above.
                       </div>
                       
                       
@@ -286,7 +248,7 @@ const NewPartModal = (props) => {
                           placeholder="Date (MM/DD/YY)">
                         </input>
                       </div>
-                      When was this part new? This component's useage as of now will be calculated from your Strava activities 
+                      When was this part new/last serviced? This component's useage as of now will be calculated from your Strava activities 
                       and assuming the component was new on the date you enter above. Your first activity will be 
                       used if the date you enter precedes your first Strava activity.
                     </div>
@@ -312,7 +274,7 @@ const NewPartModal = (props) => {
 
                 <div className="form-group row mt-5 align-items-end">
                   <label className="col-sm-12 col-form-label" >
-                    Lifespan/service interval in terms of {userInputs.useage_metric.toUpperCase()} {userInputs.useage_metric === 'distance' ? `(${props.distUnits})` : null}:
+                    Lifespan/service interval in terms of {userInputs.useage_metric.toUpperCase()} {userInputs.useage_metric === 'distance' ? `(${props.measurementPref})` : null}:
                   </label>
                   <div className="col-sm-4"></div>
                   <div className="col-sm-8">
@@ -371,8 +333,6 @@ export default NewPartModal;
 
 const resetCustomInputs = (inputs) => {
   inputs.useage_metric = '';
-  inputs.dist_on_add = '';
-  inputs.time_on_add = '';
   inputs.lifespan_dist = '';
   inputs.lifespan_time = '';
   inputs.current_wear_method;
@@ -381,5 +341,36 @@ const resetCustomInputs = (inputs) => {
 }
 
 const invalidFields = (userInputs) => {
+  let tempErrorList = [];
+
+  if (!userInputs.tracking_method) tempErrorList.push('tracking method');
+  if (!userInputs.type) tempErrorList.push('part type');
+
+  if (userInputs.tracking_method === 'custom') {
+    if (!userInputs.useage_metric) tempErrorList.push('usage metric');
+    
+    if ( userInputs.current_wear_method === "estimate" ) {
+      if ( 
+        (userInputs.current_wear_dist.length === 0 && userInputs.current_wear_time.length === 0) ||
+        Number(userInputs.current_wear_dist) < 0 || Number(userInputs.current_wear_time) < 0
+      )
+        { tempErrorList.push('current wear'); }
+    };
+
+    if (userInputs.current_wear_method === 'strava') {
+      let native_new_date = xDate(userInputs.new_date);
+      // date must be before today's date
+      // date must be after 1970
+      if (!userInputs.new_date || (native_new_date - Date.now()) > 0 || (native_new_date - xDate(1970)) < 0 ) {
+        tempErrorList.push('current wear')
+      }
+      
+    }
+
+    if ( !(Number(userInputs.lifespan_dist) > 0) && !(Number(userInputs.lifespan_time) > 0)) {
+      tempErrorList.push('life/service interval')
+    };
+  }
   
+  return tempErrorList;
 }
